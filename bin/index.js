@@ -12,12 +12,7 @@ const main = require('..')
 // this module
 
 const cli = meow({
-  help: `
-    Usage: blinkm-bmp <command>
-
-    where <command> is one of:
-      ${Object.keys(main.commands).join(', ')}
-  `,
+  help: main.help,
   version: true
 }, {})
 
