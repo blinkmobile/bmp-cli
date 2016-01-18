@@ -12,7 +12,7 @@ const commands = {
   login: require('./commands/login'),
   logout: require('./commands/logout'),
   pull: require('./commands/pull'),
-  space: require('./commands/space'),
+  scope: require('./commands/scope'),
   whoami: require('./commands/whoami')
 }
 
@@ -48,7 +48,7 @@ module.exports = function (input, flags) {
     process.exit(1)
   }
 
-  commands[command](input.slice(1), flags)
+  commands[command](input.slice(1), flags, { cwd: process.cwd() })
 }
 
 module.exports.commands = commands
