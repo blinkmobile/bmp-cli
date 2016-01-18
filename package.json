@@ -9,7 +9,8 @@
     "url": "https://github.com/blinkmobile/bmp-cli/issues"
   },
   "dependencies": {
-    "meow": "3.7.0"
+    "meow": "3.7.0",
+    "update-notifier": "0.6.0"
   },
   "devDependencies": {
     "ava": "^0.10.0",

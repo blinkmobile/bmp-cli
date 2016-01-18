@@ -1,5 +1,9 @@
 'use strict'
 
+// foreign modules
+
+const updateNotifier = require('update-notifier')
+
 // local modules
 
 const commands = {
@@ -12,7 +16,11 @@ const commands = {
   whoami: require('./commands/whoami')
 }
 
+const pkg = require('./package.json')
+
 // this module
+
+updateNotifier({ pkg }).notify()
 
 const help = `
   Usage: blinkm-bmp <command>
