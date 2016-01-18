@@ -27,6 +27,10 @@ const help = `
 
   where <command> is one of:
     ${Object.keys(commands).join(', ')}
+
+  Commands:
+    blinkm-bmp scope         => outputs the current scope
+    blinkm-bmp scope [<url>] => sets the current URL scope
 `
 
 module.exports = function (input, flags) {

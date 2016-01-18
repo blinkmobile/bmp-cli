@@ -14,6 +14,6 @@ const main = require('..')
 const cli = meow({
   help: main.help,
   version: true
-}, {})
+})
 
 main(cli.input, cli.flags)
