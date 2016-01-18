@@ -1,13 +1,13 @@
-#!/usr/bin/env node
-'use strict';
+#! /usr/bin/env node
+'use strict'
 
 // foreign modules
 
-const meow = require('meow');
+const meow = require('meow')
 
 // local modules
 
-const main = require('..');
+const main = require('..')
 
 // this module
 
@@ -19,6 +19,6 @@ const cli = meow({
       ${Object.keys(main.commands).join(', ')}
   `,
   version: true
-}, {});
+}, {})
 
-main(cli.input, cli.flags);
+main(cli.input, cli.flags)

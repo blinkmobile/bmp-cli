@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 // this module
 
 module.exports = function () {
-  global.console.log.apply(null, arguments);
-};
+  global.console.log.apply(null, arguments)
+}
 
 module.exports.commands = {
   deploy: true,

@@ -1,5 +1,5 @@
-const test = require('ava');
+const test = require('ava')
 
-require('..');
+require('..')
 
-test('stub', () => {});
+test('stub', () => {})
