@@ -8,6 +8,9 @@
   "bugs": {
     "url": "https://github.com/blinkmobile/bmp-cli/issues"
   },
+  "dependencies": {
+    "meow": "3.7.0"
+  },
   "devDependencies": {
     "ava": "^0.10.0",
     "eslint": "^1.10.3",
@@ -35,7 +38,7 @@
     "ava": "nyc ava",
     "eslint": "eslint .",
     "fixpack": "fixpack",
-    "nyc": "nyc check-coverage",
+    "nyc": "nyc check-coverage -s 0 -b 0 -f 0 -l 0",
     "posttest": "npm-run-all eslint fixpack",
     "test": "npm-run-all -s ava nyc"
   }
