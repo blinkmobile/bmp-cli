@@ -27,7 +27,7 @@ function promptCredential () {
         reject(err)
         return
       }
-      resolve(result)
+      resolve(result.credential)
     })
   })
 }

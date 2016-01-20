@@ -25,7 +25,7 @@ test.beforeEach((t) => {
     })
 })
 
-test('login with setting scope first', (t) => {
+test('login without setting scope first', (t) => {
   return auth.login({
     credential: 'abcdef',
     userConfigDir: t.context.tempDir
@@ -33,7 +33,7 @@ test('login with setting scope first', (t) => {
     .catch((err) => { t.ok(err) })
 })
 
-test('write login credential to .../blinkmrc.json', (t) => {
+test('login with scope', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json')
   return auth.login({
     credential: 'abcdef',
@@ -43,5 +43,33 @@ test('write login credential to .../blinkmrc.json', (t) => {
     .then(() => loadJson(CONFIG_FILE))
     .then((cfg) => {
       t.is(cfg.bmp['https://example.com'].credential, 'abcdef')
+    })
+})
+
+test('logout without login first', (t) => {
+  const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json')
+  return auth.logout({
+    credential: 'abcdef',
+    scope: 'https://example.com/space',
+    userConfigDir: t.context.tempDir
+  })
+    .then(() => loadJson(CONFIG_FILE))
+    .catch((err) => {
+      t.ok(err)
+    })
+})
+
+test('login then logout', (t) => {
+  const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json')
+  const options = {
+    credential: 'abcdef',
+    scope: 'https://example.com/space',
+    userConfigDir: t.context.tempDir
+  }
+  return auth.login(options)
+    .then(() => auth.logout(options))
+    .then(() => loadJson(CONFIG_FILE))
+    .then((cfg) => {
+      t.ok(!cfg.bmp['https://example.com'].credential)
     })
 })

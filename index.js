@@ -31,6 +31,8 @@ const help = `
   Commands:
     blinkm-bmp scope         => outputs the current scope
     blinkm-bmp scope [<url>] => sets the current URL scope
+    blinkm-bmp login         => store credentials on this machine
+    blinkm-bmp logout        => remove credentials from this machine
 `
 
 module.exports = function (input, flags) {
