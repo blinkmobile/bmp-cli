@@ -9,6 +9,7 @@
     "url": "https://github.com/blinkmobile/bmp-cli/issues"
   },
   "dependencies": {
+    "appdirectory": "0.1.0",
     "find-up": "1.1.0",
     "load-json-file": "1.1.0",
     "meow": "3.7.0",
