@@ -127,13 +127,13 @@ test('lookupUser for HTTP scope, 200', (t) => {
 
 test('lookupUser for HTTP scope, 200', (t) => {
   const ORIGIN = 'http://example.com';
-  const req = (url, cb) => {
+  const reqFn = (url, cb) => {
     t.is(url, `https://example.com/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return whoami.lookupUser({
     auth: { origin: ORIGIN, credential: 'abcdef' },
-    req
+    reqFn
   });
 });
 
