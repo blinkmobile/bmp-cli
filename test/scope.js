@@ -2,33 +2,33 @@
 
 // Node.js built-ins
 
-const fs = require('fs')
 const path = require('path')
 
 // foreign modules
 
 const pify = require('pify')
+const temp = pify(require('temp').track())
 const test = require('ava')
 
 // local modules
 
 const lib = require('../lib/scope')
+const pkg = require('../package.json')
 
 // this module
 
-const fsp = pify(fs)
-
-test.afterEach((t) => {
-  const tempFile = path.join(process.cwd(), lib.CONFIG_FILE)
-  fsp.access(tempFile, fs.F_OK | fs.W_OK)
-    .then(() => fsp.unlink(tempFile))
-    .catch(() => Promise.resolve()) // swallow errors
+test.beforeEach((t) => {
+  return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
+    .then((dirPath) => {
+      t.context.tempDir = dirPath
+    })
 })
 
 test.serial('read missing .blinkmrc.json', (t) => {
-  const cwd = process.cwd()
+  const cwd = t.context.tempDir
   return lib.read({ cwd })
-    .then(() => {
+    .then((result) => {
+      console.log(result)
       t.fail()
     })
     .catch((err) => {
@@ -65,8 +65,8 @@ test('read .blinkmrc.json in parent directory', (t) => {
     })
 })
 
-test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
-  const cwd = process.cwd()
+test('write invalid scope URL to .blinkmrc.json', (t) => {
+  const cwd = t.context.tempDir
   return lib.write({ cwd, scope: 'abc' })
     .then(() => {
       t.fail()
@@ -78,7 +78,7 @@ test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
 })
 
 test.serial('write to .blinkmrc.json in same directory', (t) => {
-  const cwd = process.cwd()
+  const cwd = t.context.tempDir
   return lib.write({ cwd, scope: 'https://example.com/space' })
     .then(() => lib.read({ cwd }))
     .then((scope) => {
@@ -87,10 +87,10 @@ test.serial('write to .blinkmrc.json in same directory', (t) => {
 })
 
 test.serial('update to .blinkmrc.json in parent directory', (t) => {
-  const cwd = path.join(process.cwd(), 'test')
-  return lib.write({ cwd: process.cwd(), scope: 'https://example.com/space' })
+  const cwd = path.join(t.context.tempDir, 'test')
+  return lib.write({ cwd: t.context.tempDir, scope: 'https://example.com/space' })
     .then(() => lib.write({ cwd, scope: 'https://example.com/abcdef' }))
-    .then(() => lib.read({ cwd }))
+    .then(() => lib.read({ cwd: t.context.tempDir }))
     .then((scope) => {
       t.is(scope, 'https://example.com/abcdef')
     })
