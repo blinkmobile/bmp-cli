@@ -9,6 +9,7 @@
     "url": "https://github.com/blinkmobile/bmp-cli/issues"
   },
   "dependencies": {
+    "@blinkmobile/json-as-files": "1.0.0",
     "appdirectory": "0.1.0",
     "async": "1.5.2",
     "elegant-spinner": "1.0.1",
