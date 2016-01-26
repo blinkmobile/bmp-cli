@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
 module.exports = function () {
-  console.error('not implemented')
-  process.exit(1)
-}
+  console.error('not implemented');
+  process.exit(1);
+};

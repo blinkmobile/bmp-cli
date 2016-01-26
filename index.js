@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
 // foreign modules
 
-const updateNotifier = require('update-notifier')
+const updateNotifier = require('update-notifier');
 
 // local modules
 
@@ -14,13 +14,13 @@ const commands = {
   pull: require('./commands/pull'),
   scope: require('./commands/scope'),
   whoami: require('./commands/whoami')
-}
+};
 
-const pkg = require('./package.json')
+const pkg = require('./package.json');
 
 // this module
 
-updateNotifier({ pkg }).notify()
+updateNotifier({ pkg }).notify();
 
 const help = `
   Usage: blinkm-bmp <command>
@@ -33,30 +33,30 @@ const help = `
     blinkm-bmp scope [<url>] => sets the current URL scope
     blinkm-bmp login         => store credentials on this machine
     blinkm-bmp logout        => remove credentials from this machine
-`
+`;
 
 module.exports = function (input, flags) {
-  const command = input[0]
+  const command = input[0];
 
   if (!command) {
-    console.log(help)
-    process.exit(0)
+    console.log(help);
+    process.exit(0);
   }
 
   if (!commands[command]) {
-    console.error(`unknown command: ${command}`)
-    console.log(help)
-    process.exit(1)
+    console.error(`unknown command: ${command}`);
+    console.log(help);
+    process.exit(1);
   }
 
   if (typeof commands[command] !== 'function') {
-    console.log('not implemented')
-    process.exit(1)
+    console.log('not implemented');
+    process.exit(1);
   }
 
-  commands[command](input.slice(1), flags, { cwd: process.cwd() })
-}
+  commands[command](input.slice(1), flags, { cwd: process.cwd() });
+};
 
-module.exports.commands = commands
+module.exports.commands = commands;
 
-module.exports.help = help
+module.exports.help = help;
