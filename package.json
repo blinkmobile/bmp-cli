@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "appdirectory": "0.1.0",
+    "async": "1.5.2",
+    "elegant-spinner": "1.0.1",
     "find-up": "1.1.0",
     "load-json-file": "1.1.0",
+    "log-update": "1.0.2",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
     "pify": "2.3.0",
     "prompt": "0.2.14",
+    "request": "2.67.0",
     "update-notifier": "0.6.0",
     "write-json-file": "1.2.0"
   },
