@@ -51,30 +51,6 @@ test.beforeEach((t) => {
     });
 });
 
-test.serial('getDashboard', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/dashboard`);
-    cb(null, { statusCode: 200 }, '{}');
-  };
-  return pull.getDashboard({
-    auth: { origin: ORIGIN, credential: 'abcdef' }
-  });
-});
-
-test.serial('getJson', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/answerspaces/123`);
-    cb(null, { statusCode: 200 }, '{}');
-  };
-  return pull.getJson({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
-    id: 123,
-    type: 'answerspaces'
-  });
-});
-
 test('pullAnswerSpace', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (url, cb) => {

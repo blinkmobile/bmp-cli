@@ -108,8 +108,7 @@ test('lookupUser, 200', (t) => {
     cb(null, { statusCode: 200 }, '{}');
   };
   return whoami.lookupUser({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
-    reqFn
+    auth: { origin: ORIGIN, credential: 'abcdef' }
   });
 });
 
@@ -120,20 +119,7 @@ test('lookupUser for HTTP scope, 200', (t) => {
     cb(null, { statusCode: 200 }, '{}');
   };
   return whoami.lookupUser({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
-    reqFn
-  });
-});
-
-test('lookupUser for HTTP scope, 200', (t) => {
-  const ORIGIN = 'http://example.com';
-  const reqFn = (url, cb) => {
-    t.is(url, `https://example.com/_api/v1/dashboard`);
-    cb(null, { statusCode: 200 }, '{}');
-  };
-  return whoami.lookupUser({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
-    reqFn
+    auth: { origin: ORIGIN, credential: 'abcdef' }
   });
 });
 
@@ -144,8 +130,7 @@ test('lookupUser, error', (t) => {
     cb(new Error('blah'));
   };
   return whoami.lookupUser({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
-    reqFn
+    auth: { origin: ORIGIN, credential: 'abcdef' }
   })
     .catch((err) => {
       t.is(err.message, 'blah');
@@ -159,8 +144,7 @@ test('lookupUser, 403', (t) => {
     cb(null, { statusCode: 403 });
   };
   return whoami.lookupUser({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
-    reqFn
+    auth: { origin: ORIGIN, credential: 'abcdef' }
   })
     .catch((err) => {
       t.is(err.message, '403');
