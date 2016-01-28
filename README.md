@@ -21,3 +21,11 @@ blinkm bmp --help
 # or, shorter
 bm bmp --help
 ```
+
+
+## Environment Variables
+
+### BMP_USER_CONFIG_DIR
+
+By default, this tool stores authentication data in the user's home directory.
+You may set this variable to control this location.

@@ -21,24 +21,23 @@ const pkg = require('../package.json');
 test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
+      process.env.BMP_USER_CONFIG_DIR = dirPath;
       t.context.tempDir = dirPath;
     });
 });
 
-test('login without setting scope first', (t) => {
+test.serial('login without setting scope first', (t) => {
   return auth.login({
-    credential: 'abcdef',
-    userConfigDir: t.context.tempDir
+    credential: 'abcdef'
   })
     .catch((err) => { t.ok(err); });
 });
 
-test('login with scope', (t) => {
+test.serial('login with scope', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
   return auth.login({
     credential: 'abcdef',
-    scope: 'https://example.com/space',
-    userConfigDir: t.context.tempDir
+    scope: 'https://example.com/space'
   })
     .then(() => loadJson(CONFIG_FILE))
     .then((cfg) => {
@@ -46,12 +45,11 @@ test('login with scope', (t) => {
     });
 });
 
-test('logout without login first', (t) => {
+test.serial('logout without login first', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
   return auth.logout({
     credential: 'abcdef',
-    scope: 'https://example.com/space',
-    userConfigDir: t.context.tempDir
+    scope: 'https://example.com/space'
   })
     .then(() => loadJson(CONFIG_FILE))
     .catch((err) => {
@@ -59,12 +57,11 @@ test('logout without login first', (t) => {
     });
 });
 
-test('login then logout', (t) => {
+test.serial('login then logout', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
   const options = {
     credential: 'abcdef',
-    scope: 'https://example.com/space',
-    userConfigDir: t.context.tempDir
+    scope: 'https://example.com/space'
   };
   return auth.login(options)
     .then(() => auth.logout(options))

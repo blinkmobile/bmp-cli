@@ -33,25 +33,24 @@ test.after(() => mockery.disable());
 test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
+      process.env.BMP_USER_CONFIG_DIR = dirPath;
       t.context.tempDir = dirPath;
     })
     .then(() => {
       return auth.login({
         credential: 'abcdef',
-        scope: 'https://example.com/space',
-        userConfigDir: t.context.tempDir
+        scope: 'https://example.com/space'
       });
     })
     .then(() => {
       return auth.login({
         credential: 'ghijkl',
-        scope: 'https://otherexample.com/space',
-        userConfigDir: t.context.tempDir
+        scope: 'https://otherexample.com/space'
       });
     });
 });
 
-test('pullAnswerSpace', (t) => {
+test.serial('pullAnswerSpace', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (url, cb) => {
     switch (url) {

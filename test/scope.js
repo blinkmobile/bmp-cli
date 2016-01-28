@@ -20,6 +20,7 @@ const pkg = require('../package.json');
 test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
+      process.env.BMP_USER_CONFIG_DIR = dirPath;
       t.context.tempDir = dirPath;
     });
 });
@@ -37,7 +38,7 @@ test.serial('read missing .blinkmrc.json', (t) => {
     });
 });
 
-test('read empty .blinkmrc.json', (t) => {
+test.serial('read empty .blinkmrc.json', (t) => {
   const cwd = path.join(__dirname, 'fixtures', 'scope', 'empty');
   return lib.read({ cwd })
     .then(() => {
@@ -49,7 +50,7 @@ test('read empty .blinkmrc.json', (t) => {
     });
 });
 
-test('read .blinkmrc.json in same directory', (t) => {
+test.serial('read .blinkmrc.json in same directory', (t) => {
   const cwd = path.join(__dirname, 'fixtures', 'scope');
   return lib.read({ cwd })
     .then((scope) => {
@@ -57,7 +58,7 @@ test('read .blinkmrc.json in same directory', (t) => {
     });
 });
 
-test('read .blinkmrc.json in parent directory', (t) => {
+test.serial('read .blinkmrc.json in parent directory', (t) => {
   const cwd = path.join(__dirname, 'fixtures', 'scope', 'sub');
   return lib.read({ cwd })
     .then((scope) => {
@@ -65,7 +66,7 @@ test('read .blinkmrc.json in parent directory', (t) => {
     });
 });
 
-test('write invalid scope URL to .blinkmrc.json', (t) => {
+test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
   const cwd = t.context.tempDir;
   return lib.write({ cwd, scope: 'abc' })
     .then(() => {

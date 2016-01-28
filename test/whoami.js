@@ -34,35 +34,33 @@ test.after(() => mockery.disable());
 test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
+      process.env.BMP_USER_CONFIG_DIR = dirPath;
       t.context.tempDir = dirPath;
     })
     .then(() => {
       return auth.login({
         credential: 'abcdef',
-        scope: 'https://example.com/space',
-        userConfigDir: t.context.tempDir
+        scope: 'https://example.com/space'
       });
     })
     .then(() => {
       return auth.login({
         credential: 'ghijkl',
-        scope: 'https://otherexample.com/space',
-        userConfigDir: t.context.tempDir
+        scope: 'https://otherexample.com/space'
       });
     });
 });
 
-test('getAuthentication', (t) => {
+test.serial('getAuthentication', (t) => {
   return whoami.getAuthentication({
-    scope: 'https://example.com/space',
-    userConfigDir: t.context.tempDir
+    scope: 'https://example.com/space'
   })
     .then((auth) => {
       t.same(auth, { origin: 'https://example.com', credential: 'abcdef' });
     });
 });
 
-test('getAuthentication, no blinkmrc.json file', (t) => {
+test.serial('getAuthentication, no blinkmrc.json file', (t) => {
   return fsp.unlink(path.join(t.context.tempDir, 'blinkmrc.json'))
     .then(() => whoami.getAuthentication({
       scope: 'https://example.com/space',
@@ -71,7 +69,7 @@ test('getAuthentication, no blinkmrc.json file', (t) => {
     .catch((err) => t.ok(err));
 });
 
-test('getAuthentication, corrupt blinkmrc.json file', (t) => {
+test.serial('getAuthentication, corrupt blinkmrc.json file', (t) => {
   return fsp.appendFile(path.join(t.context.tempDir, 'blinkmrc.json'), 'abc')
     .then(() => whoami.getAuthentication({
       scope: 'https://example.com/space',
@@ -80,10 +78,9 @@ test('getAuthentication, corrupt blinkmrc.json file', (t) => {
     .catch((err) => t.ok(err));
 });
 
-test('getAuthentication, after logging out', (t) => {
+test.serial('getAuthentication, after logging out', (t) => {
   const options = {
-    scope: 'https://example.com/space',
-    userConfigDir: t.context.tempDir
+    scope: 'https://example.com/space'
   };
   return auth.logout(options)
     .then(() => whoami.getAuthentication(options))
@@ -91,8 +88,8 @@ test('getAuthentication, after logging out', (t) => {
     .catch((err) => t.ok(err));
 });
 
-test('getAuthentications', (t) => {
-  return whoami.getAuthentications({ userConfigDir: t.context.tempDir })
+test.serial('getAuthentications', (t) => {
+  return whoami.getAuthentications({})
     .then((auths) => {
       t.same(auths, [
         { origin: 'https://example.com', credential: 'abcdef' },
@@ -101,7 +98,7 @@ test('getAuthentications', (t) => {
     });
 });
 
-test('lookupUser, 200', (t) => {
+test.serial('lookupUser, 200', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (url, cb) => {
     t.is(url, `${ORIGIN}/_api/v1/dashboard`);
@@ -112,7 +109,7 @@ test('lookupUser, 200', (t) => {
   });
 });
 
-test('lookupUser for HTTP scope, 200', (t) => {
+test.serial('lookupUser for HTTP scope, 200', (t) => {
   const ORIGIN = 'http://example.com';
   reqFn = (url, cb) => {
     t.is(url, `https://example.com/_api/v1/dashboard`);
@@ -123,7 +120,7 @@ test('lookupUser for HTTP scope, 200', (t) => {
   });
 });
 
-test('lookupUser, error', (t) => {
+test.serial('lookupUser, error', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (url, cb) => {
     t.is(url, `${ORIGIN}/_api/v1/dashboard`);
@@ -137,7 +134,7 @@ test('lookupUser, error', (t) => {
     });
 });
 
-test('lookupUser, 403', (t) => {
+test.serial('lookupUser, 403', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (url, cb) => {
     t.is(url, `${ORIGIN}/_api/v1/dashboard`);
