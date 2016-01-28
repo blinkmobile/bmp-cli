@@ -21,13 +21,13 @@ test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
       process.env.BMP_USER_CONFIG_DIR = dirPath;
+      process.env.BMP_WORKING_DIR = dirPath;
       t.context.tempDir = dirPath;
     });
 });
 
 test.serial('read missing .blinkmrc.json', (t) => {
-  const cwd = t.context.tempDir;
-  return lib.read({ cwd })
+  return lib.read()
     .then((result) => {
       console.log(result);
       t.fail();
@@ -39,8 +39,8 @@ test.serial('read missing .blinkmrc.json', (t) => {
 });
 
 test.serial('read empty .blinkmrc.json', (t) => {
-  const cwd = path.join(__dirname, 'fixtures', 'scope', 'empty');
-  return lib.read({ cwd })
+  process.env.BMP_WORKING_DIR = path.join(__dirname, 'fixtures', 'scope', 'empty');
+  return lib.read()
     .then(() => {
       t.fail();
     })
@@ -51,24 +51,23 @@ test.serial('read empty .blinkmrc.json', (t) => {
 });
 
 test.serial('read .blinkmrc.json in same directory', (t) => {
-  const cwd = path.join(__dirname, 'fixtures', 'scope');
-  return lib.read({ cwd })
+  process.env.BMP_WORKING_DIR = path.join(__dirname, 'fixtures', 'scope');
+  return lib.read()
     .then((scope) => {
       t.is(scope, 'https://example.com/space');
     });
 });
 
 test.serial('read .blinkmrc.json in parent directory', (t) => {
-  const cwd = path.join(__dirname, 'fixtures', 'scope', 'sub');
-  return lib.read({ cwd })
+  process.env.BMP_WORKING_DIR = path.join(__dirname, 'fixtures', 'scope', 'sub');
+  return lib.read()
     .then((scope) => {
       t.is(scope, 'https://example.com/space');
     });
 });
 
 test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
-  const cwd = t.context.tempDir;
-  return lib.write({ cwd, scope: 'abc' })
+  return lib.write({ scope: 'abc' })
     .then(() => {
       t.fail();
     })
@@ -79,20 +78,29 @@ test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
 });
 
 test.serial('write to .blinkmrc.json in same directory', (t) => {
-  const cwd = t.context.tempDir;
-  return lib.write({ cwd, scope: 'https://example.com/space' })
-    .then(() => lib.read({ cwd }))
+  return lib.write({ scope: 'https://example.com/space' })
+    .then(() => lib.read())
     .then((scope) => {
       t.is(scope, 'https://example.com/space');
     });
 });
 
 test.serial('update to .blinkmrc.json in parent directory', (t) => {
-  const cwd = path.join(t.context.tempDir, 'test');
-  return lib.write({ cwd: t.context.tempDir, scope: 'https://example.com/space' })
-    .then(() => lib.write({ cwd, scope: 'https://example.com/abcdef' }))
-    .then(() => lib.read({ cwd: t.context.tempDir }))
-    .then((scope) => {
-      t.is(scope, 'https://example.com/abcdef');
-    });
+  // write from parent directory
+  process.env.BMP_WORKING_DIR = t.context.tempDir;
+  return lib.write({ scope: 'https://example.com/space' })
+    .then(() => {
+      // write from sub-directory
+      process.env.BMP_WORKING_DIR = path.join(t.context.tempDir, 'test');
+      return lib.write({ scope: 'https://example.com/abcdef' });
+    })
+    // read from sub-directory
+    .then(() => lib.read())
+    .then((scope) => t.is(scope, 'https://example.com/abcdef'))
+    // read from parent directory
+    .then(() => {
+      process.env.BMP_WORKING_DIR = t.context.tempDir;
+      return lib.read();
+    })
+    .then((scope) => t.is(scope, 'https://example.com/abcdef'));
 });

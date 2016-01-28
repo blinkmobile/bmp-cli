@@ -29,3 +29,8 @@ bm bmp --help
 
 By default, this tool stores authentication data in the user's home directory.
 You may set this variable to control this location.
+
+### BMP_WORKING_DIR
+
+By default, this tool looks for the .blinkmrc.json file in the current working directory, and stores project files there, too.
+You may set this variable to control this location.

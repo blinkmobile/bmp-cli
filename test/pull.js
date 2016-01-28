@@ -34,6 +34,7 @@ test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
       process.env.BMP_USER_CONFIG_DIR = dirPath;
+      process.env.BMP_WORKING_DIR = dirPath;
       t.context.tempDir = dirPath;
     })
     .then(() => {
@@ -77,8 +78,7 @@ test.serial('pullAnswerSpace', (t) => {
     }
   };
   return pull.pullAnswerSpace({
-    auth: { origin: ORIGIN },
-    cwd: t.context.tempDir
+    auth: { origin: ORIGIN }
   })
     .then(() => fsp.access(path.join(t.context.tempDir, 'answerSpace.json')), fs.R_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions')), fs.R_OK | fs.X_OK)
