@@ -35,26 +35,22 @@ test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
       process.env.BMP_USER_CONFIG_DIR = dirPath;
+      process.env.BMP_WORKING_DIR = dirPath;
       t.context.tempDir = dirPath;
     })
     .then(() => {
-      return auth.login({
-        credential: 'abcdef',
-        scope: 'https://example.com/space'
-      });
+      process.env.BMP_SCOPE = 'https://example.com/space';
+      return auth.login({ credential: 'abcdef' });
     })
     .then(() => {
-      return auth.login({
-        credential: 'ghijkl',
-        scope: 'https://otherexample.com/space'
-      });
+      process.env.BMP_SCOPE = 'https://otherexample.com/space';
+      return auth.login({ credential: 'ghijkl' });
     });
 });
 
 test.serial('getAuthentication', (t) => {
-  return whoami.getAuthentication({
-    scope: 'https://example.com/space'
-  })
+  process.env.BMP_SCOPE = 'https://example.com/space';
+  return whoami.getAuthentication()
     .then((auth) => {
       t.same(auth, { origin: 'https://example.com', credential: 'abcdef' });
     });
@@ -79,11 +75,9 @@ test.serial('getAuthentication, corrupt blinkmrc.json file', (t) => {
 });
 
 test.serial('getAuthentication, after logging out', (t) => {
-  const options = {
-    scope: 'https://example.com/space'
-  };
-  return auth.logout(options)
-    .then(() => whoami.getAuthentication(options))
+  process.env.BMP_SCOPE = 'https://example.com/space';
+  return auth.logout()
+    .then(() => whoami.getAuthentication())
     .then(() => t.fail('resolved'))
     .catch((err) => t.ok(err));
 });

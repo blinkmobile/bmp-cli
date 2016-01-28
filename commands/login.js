@@ -40,12 +40,10 @@ function getCredential (input) {
 }
 
 module.exports = function (input, flags, options) {
-  let projectScope;
   scope.read()
-    .then((s) => { projectScope = s; })
     .catch(() => Promise.reject(new Error('must set project scope first')))
     .then(() => getCredential(input))
-    .then((credential) => auth.login({ credential, scope: projectScope }))
+    .then((credential) => auth.login({ credential }))
     .catch((err) => {
       console.error(err);
       process.exit(1);

@@ -38,16 +38,12 @@ test.beforeEach((t) => {
       t.context.tempDir = dirPath;
     })
     .then(() => {
-      return auth.login({
-        credential: 'abcdef',
-        scope: 'https://example.com/space'
-      });
+      process.env.BMP_SCOPE = 'https://example.com/space';
+      return auth.login({ credential: 'abcdef' });
     })
     .then(() => {
-      return auth.login({
-        credential: 'ghijkl',
-        scope: 'https://otherexample.com/space'
-      });
+      process.env.BMP_SCOPE = 'https://otherexample.com/space';
+      return auth.login({ credential: 'ghijkl' });
     });
 });
 

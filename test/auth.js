@@ -35,9 +35,9 @@ test.serial('login without setting scope first', (t) => {
 
 test.serial('login with scope', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
+  process.env.BMP_SCOPE = 'https://example.com/space';
   return auth.login({
-    credential: 'abcdef',
-    scope: 'https://example.com/space'
+    credential: 'abcdef'
   })
     .then(() => loadJson(CONFIG_FILE))
     .then((cfg) => {
@@ -47,9 +47,9 @@ test.serial('login with scope', (t) => {
 
 test.serial('logout without login first', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
+  process.env.BMP_SCOPE = 'https://example.com/space';
   return auth.logout({
-    credential: 'abcdef',
-    scope: 'https://example.com/space'
+    credential: 'abcdef'
   })
     .then(() => loadJson(CONFIG_FILE))
     .catch((err) => {
@@ -59,9 +59,9 @@ test.serial('logout without login first', (t) => {
 
 test.serial('login then logout', (t) => {
   const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
+  process.env.BMP_SCOPE = 'https://example.com/space';
   const options = {
-    credential: 'abcdef',
-    scope: 'https://example.com/space'
+    credential: 'abcdef'
   };
   return auth.login(options)
     .then(() => auth.logout(options))
