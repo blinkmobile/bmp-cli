@@ -33,10 +33,6 @@ test.beforeEach((t) => {
     .then(() => {
       process.env.BMP_SCOPE = 'https://example.com/space';
       return auth.login({ credential: 'abcdef' });
-    })
-    .then(() => {
-      process.env.BMP_SCOPE = 'https://otherexample.com/space';
-      return auth.login({ credential: 'ghijkl' });
     });
 });
 
@@ -46,9 +42,7 @@ test.serial('getDashboard', (t) => {
     t.is(url, `${ORIGIN}/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
-  return api.getDashboard({
-    auth: { origin: ORIGIN, credential: 'abcdef' }
-  });
+  return api.getDashboard();
 });
 
 test.serial('getResource', (t) => {
@@ -58,7 +52,6 @@ test.serial('getResource', (t) => {
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.getResource({
-    auth: { origin: ORIGIN, credential: 'abcdef' },
     id: 123,
     type: 'answerspaces'
   });

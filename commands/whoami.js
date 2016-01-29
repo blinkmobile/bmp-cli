@@ -9,20 +9,21 @@ const logUpdate = require('log-update');
 
 // local modules
 
+const auth = require('../lib/auth');
 const whoami = require('../lib/whoami');
 
 // this module
 
 const pasync = pify(require('async'));
 
-function logAuthLookup (auth) {
+function logAuthLookup (options) {
   const frame = elegantSpinner();
   let timer = setInterval(() => {
-    logUpdate(`${auth.origin}: ${frame()}`);
+    logUpdate(`${options.origin}: ${frame()}`);
   }, 100);
-  return whoami.lookupUser({ auth })
+  return whoami.lookupUser()
     .then((result) => {
-      logUpdate(`${auth.origin}: ${result.name} <${result.email}>`);
+      logUpdate(`${options.origin}: ${result.name} <${result.email}>`);
       clearTimeout(timer);
     })
     .catch((err) => {
@@ -32,7 +33,7 @@ function logAuthLookup (auth) {
 }
 
 module.exports = function (input, flags, options) {
-  whoami.getAuthentications()
+  auth.readAll()
     .then((auths) => {
       if (auths.length) {
         return pasync.eachSeries(auths, async.asyncify(logAuthLookup));

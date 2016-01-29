@@ -40,10 +40,6 @@ test.beforeEach((t) => {
     .then(() => {
       process.env.BMP_SCOPE = 'https://example.com/space';
       return auth.login({ credential: 'abcdef' });
-    })
-    .then(() => {
-      process.env.BMP_SCOPE = 'https://otherexample.com/space';
-      return auth.login({ credential: 'ghijkl' });
     });
 });
 
@@ -73,9 +69,7 @@ test.serial('pullAnswerSpace', (t) => {
         cb(new Error('unexpected fetch'));
     }
   };
-  return pull.pullAnswerSpace({
-    auth: { origin: ORIGIN }
-  })
+  return pull.pullAnswerSpace()
     .then(() => fsp.access(path.join(t.context.tempDir, 'answerSpace.json')), fs.R_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions')), fs.R_OK | fs.X_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions', 'test')), fs.R_OK | fs.X_OK)

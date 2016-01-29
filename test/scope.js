@@ -34,7 +34,6 @@ test.serial('read missing .blinkmrc.json', (t) => {
     })
     .catch((err) => {
       t.ok(err);
-      return Promise.resolve();
     });
 });
 
@@ -46,7 +45,6 @@ test.serial('read empty .blinkmrc.json', (t) => {
     })
     .catch((err) => {
       t.ok(err);
-      return Promise.resolve();
     });
 });
 
@@ -73,7 +71,6 @@ test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
     })
     .catch((err) => {
       t.ok(err);
-      return Promise.resolve();
     });
 });
 
