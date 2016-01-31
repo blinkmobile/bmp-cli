@@ -1,6 +1,11 @@
 'use strict';
 
-module.exports = function () {
-  console.error('not implemented');
-  process.exit(1);
+// local modules
+
+const deploy = require('../lib/deploy');
+
+// this module
+
+module.exports = function (input, flags, options) {
+  return deploy.deployAll();
 };
