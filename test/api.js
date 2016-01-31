@@ -20,7 +20,7 @@ let reqFn;
 test.before(() => {
   mockery.enable();
   mockery.registerAllowables([ 'empower-core' ]);
-  mockery.registerMock('request', (url, cb) => reqFn(url, cb));
+  mockery.registerMock('request', (options, cb) => reqFn(options, cb));
 });
 test.after(() => mockery.disable());
 
@@ -38,8 +38,8 @@ test.beforeEach((t) => {
 
 test.serial('getDashboard', (t) => {
   const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/dashboard`);
+  reqFn = (options, cb) => {
+    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.getDashboard();
@@ -47,8 +47,8 @@ test.serial('getDashboard', (t) => {
 
 test.serial('getResource', (t) => {
   const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/answerspaces/123`);
+  reqFn = (options, cb) => {
+    t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.getResource({

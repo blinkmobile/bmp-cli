@@ -26,7 +26,7 @@ let reqFn;
 test.before(() => {
   mockery.enable();
   mockery.registerAllowables([ 'empower-core' ]);
-  mockery.registerMock('request', (url, cb) => reqFn(url, cb));
+  mockery.registerMock('request', (options, cb) => reqFn(options, cb));
 });
 test.after(() => mockery.disable());
 
@@ -45,8 +45,8 @@ test.beforeEach((t) => {
 
 test.serial('pullAnswerSpace', (t) => {
   const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    switch (url) {
+  reqFn = (options, cb) => {
+    switch (options.url) {
       case `${ORIGIN}/_api/v1/dashboard`:
         cb(null, { statusCode: 200 }, '{ "answerSpace": { "id": "123" } }');
         break;

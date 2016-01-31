@@ -20,7 +20,7 @@ let reqFn;
 test.before(() => {
   mockery.enable();
   mockery.registerAllowables([ 'empower-core' ]);
-  mockery.registerMock('request', (url, cb) => reqFn(url, cb));
+  mockery.registerMock('request', (options, cb) => reqFn(options, cb));
 });
 test.after(() => mockery.disable());
 
@@ -39,8 +39,8 @@ test.beforeEach((t) => {
 
 test.serial('lookupUser, 200', (t) => {
   const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/dashboard`);
+  reqFn = (options, cb) => {
+    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return whoami.lookupUser();
@@ -48,8 +48,8 @@ test.serial('lookupUser, 200', (t) => {
 
 test.serial('lookupUser for HTTP scope, 200', (t) => {
   process.env.BMP_SCOPE = 'http://example.com/space';
-  reqFn = (url, cb) => {
-    t.is(url, `https://example.com/_api/v1/dashboard`);
+  reqFn = (options, cb) => {
+    t.is(options.url, `https://example.com/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return whoami.lookupUser();
@@ -57,8 +57,8 @@ test.serial('lookupUser for HTTP scope, 200', (t) => {
 
 test.serial('lookupUser, error', (t) => {
   const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/dashboard`);
+  reqFn = (options, cb) => {
+    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
     cb(new Error('blah'));
   };
   return whoami.lookupUser()
@@ -69,8 +69,8 @@ test.serial('lookupUser, error', (t) => {
 
 test.serial('lookupUser, 403', (t) => {
   const ORIGIN = 'https://example.com';
-  reqFn = (url, cb) => {
-    t.is(url, `${ORIGIN}/_api/v1/dashboard`);
+  reqFn = (options, cb) => {
+    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
     cb(null, { statusCode: 403 });
   };
   return whoami.lookupUser()
