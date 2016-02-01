@@ -28,11 +28,16 @@ const help = `
   where <command> is one of:
     ${Object.keys(commands).join(', ')}
 
-  Commands:
-    blinkm-bmp scope         => outputs the current scope
-    blinkm-bmp scope [<url>] => sets the current URL scope
-    blinkm-bmp login         => store credentials on this machine
-    blinkm-bmp logout        => remove credentials from this machine
+  Getting started:
+    scope         => outputs the current scope
+    scope [<url>] => sets the current URL scope
+    login         => store credentials on this machine
+    logout        => remove credentials from this machine
+    pull          => download remote configuration to local files
+
+  Getting work done:
+    whoami        => double-check your authentication details
+    deploy        => update remote configuration to match local files
 `;
 
 module.exports = function (input, flags) {
