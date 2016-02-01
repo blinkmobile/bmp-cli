@@ -1,5 +1,10 @@
 'use strict';
 
+// Node.js built-ins
+
+const fs = require('fs');
+const path = require('path');
+
 // foreign modules
 
 const mockery = require('mockery');
@@ -14,6 +19,8 @@ const pkg = require('../package.json');
 const whoami = require('../lib/whoami');
 
 // this module
+
+const fsp = pify(fs);
 
 let reqFn;
 
@@ -53,6 +60,24 @@ test('getAuthentication', (t) => {
     .then((auth) => {
       t.same(auth, { origin: 'https://example.com', credential: 'abcdef' });
     });
+});
+
+test('getAuthentication, no blinkmrc.json file', (t) => {
+  return fsp.unlink(path.join(t.context.tempDir, 'blinkmrc.json'))
+    .then(() => whoami.getAuthentication({
+      scope: 'https://example.com/space',
+      userConfigDir: t.context.tempDir
+    }))
+    .catch((err) => t.ok(err));
+});
+
+test('getAuthentication, corrupt blinkmrc.json file', (t) => {
+  return fsp.appendFile(path.join(t.context.tempDir, 'blinkmrc.json'), 'abc')
+    .then(() => whoami.getAuthentication({
+      scope: 'https://example.com/space',
+      userConfigDir: t.context.tempDir
+    }))
+    .catch((err) => t.ok(err));
 });
 
 test('getAuthentication, after logging out', (t) => {
