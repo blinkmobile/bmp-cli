@@ -43,6 +43,7 @@
   "files": [
     "bin",
     "commands",
+    "lib",
     "index.js"
   ],
   "homepage": "https://github.com/blinkmobile/bmp-cli#readme",
