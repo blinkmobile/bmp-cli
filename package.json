@@ -1,7 +1,7 @@
 {
   "name": "@blinkmobile/bmp-cli",
   "description": "CLI utility for BlinkMobile's Mobility Platform",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "bin": {
     "blinkm-bmp": "bin/index.js"
   },
