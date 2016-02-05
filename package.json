@@ -11,9 +11,11 @@
   "dependencies": {
     "@blinkmobile/json-as-files": "1.0.0",
     "appdirectory": "0.1.0",
+    "are-we-there-yet": "1.1.1",
     "async": "1.5.2",
     "elegant-spinner": "1.0.1",
     "find-up": "1.1.0",
+    "gauge": "1.2.5",
     "load-json-file": "1.1.0",
     "log-update": "1.0.2",
     "meow": "3.7.0",

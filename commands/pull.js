@@ -1,11 +1,28 @@
 'use strict';
 
+// foreign modules
+
+const Gauge = require('gauge');
+
 // local modules
 
+const progress = require('../lib/progress');
 const pull = require('../lib/pull');
 
 // this module
 
 module.exports = function (input, flags, options) {
-  return pull.pullAll();
+  const gauge = new Gauge();
+
+  progress.on('change', (name, completed) => gauge.show('pull', completed));
+
+  return pull.pullAll()
+    .then(() => {
+      progress.finish();
+      gauge.hide();
+    })
+    .catch((err) => {
+      gauge.hide();
+      throw err;
+    });
 };
