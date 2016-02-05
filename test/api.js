@@ -9,9 +9,9 @@ const test = require('ava');
 
 // local modules
 
+const api = require('../lib/api');
 const auth = require('../lib/auth');
 const pkg = require('../package.json');
-const whoami = require('../lib/whoami');
 
 // this module
 
@@ -28,7 +28,6 @@ test.beforeEach((t) => {
   return temp.mkdir(pkg.name.replace(/\//g, '-') + '-')
     .then((dirPath) => {
       process.env.BMP_USER_CONFIG_DIR = dirPath;
-      process.env.BMP_WORKING_DIR = dirPath;
       t.context.tempDir = dirPath;
     })
     .then(() => {
@@ -37,44 +36,23 @@ test.beforeEach((t) => {
     });
 });
 
-test.serial('lookupUser, 200', (t) => {
+test.serial('getDashboard', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
-  return whoami.lookupUser();
+  return api.getDashboard();
 });
 
-test.serial('lookupUser for HTTP scope, 200', (t) => {
-  process.env.BMP_SCOPE = 'http://example.com/space';
+test.serial('getResource', (t) => {
+  const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
-    t.is(options.url, `https://example.com/_api/v1/dashboard`);
+    t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
     cb(null, { statusCode: 200 }, '{}');
   };
-  return whoami.lookupUser();
-});
-
-test.serial('lookupUser, error', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (options, cb) => {
-    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
-    cb(new Error('blah'));
-  };
-  return whoami.lookupUser()
-    .catch((err) => {
-      t.is(err.message, 'blah');
-    });
-});
-
-test.serial('lookupUser, 403', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (options, cb) => {
-    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
-    cb(null, { statusCode: 403 });
-  };
-  return whoami.lookupUser()
-    .catch((err) => {
-      t.is(err.message, '403');
-    });
+  return api.getResource({
+    id: 123,
+    type: 'answerspaces'
+  });
 });

@@ -2,25 +2,25 @@
 
 // Node.js built-ins
 
-const fs = require('fs');
 const path = require('path');
 
 // foreign modules
 
+const mkdirp = require('mkdirp');
 const mockery = require('mockery');
 const pify = require('pify');
 const temp = pify(require('temp').track());
 const test = require('ava');
+const writeJson = require('write-json-file');
 
 // local modules
 
 const auth = require('../lib/auth');
+const deploy = require('../lib/deploy');
 const pkg = require('../package.json');
-const pull = require('../lib/pull');
 
 // this module
 
-const fsp = pify(fs);
 let reqFn;
 
 test.before(() => {
@@ -43,35 +43,44 @@ test.beforeEach((t) => {
     });
 });
 
-test.serial('pullAnswerSpace', (t) => {
+test.serial('deployAll', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     switch (options.url) {
-      case `${ORIGIN}/_api/v1/dashboard`:
-        cb(null, { statusCode: 200 }, '{ "answerSpace": { "id": "123" } }');
-        break;
-
       case `${ORIGIN}/_api/v1/answerspaces/123`:
-        cb(null, { statusCode: 200 }, `{
-            "answerspaces": {
-              "links": {
-                "interactions": [ "456" ]
-              }
-            }
-          }`);
+        cb(null, { statusCode: 200 }, `{}`);
         break;
 
       case `${ORIGIN}/_api/v1/interactions/456`:
-        cb(null, { statusCode: 200 }, `{ "interactions": { "name": "test" } }`);
+        cb(null, { statusCode: 200 }, `{}`);
         break;
 
       default:
         cb(new Error('unexpected fetch'));
     }
   };
-  return pull.pullAnswerSpace()
-    .then(() => fsp.access(path.join(t.context.tempDir, 'answerSpace.json')), fs.R_OK)
-    .then(() => fsp.access(path.join(t.context.tempDir, 'interactions')), fs.R_OK | fs.X_OK)
-    .then(() => fsp.access(path.join(t.context.tempDir, 'interactions', 'test')), fs.R_OK | fs.X_OK)
-    .then(() => fsp.access(path.join(t.context.tempDir, 'interactions', 'test', 'test.json')), fs.R_OK);
+  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+    id: '123'
+  })
+    .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'test')))
+    .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'test', 'test.json'), {
+      id: '456'
+    }))
+    .then(() => deploy.deployAll());
+});
+
+test.serial('deployAll no interactions', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    switch (options.url) {
+      case `${ORIGIN}/_api/v1/answerspaces/123`:
+        cb(null, { statusCode: 200 }, `{}`);
+        break;
+
+      default:
+        cb(new Error('unexpected fetch'));
+    }
+  };
+  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), { id: '123' })
+    .then(() => deploy.deployAll());
 });
