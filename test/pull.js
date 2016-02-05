@@ -69,7 +69,7 @@ test.serial('pullAnswerSpace', (t) => {
         cb(new Error('unexpected fetch'));
     }
   };
-  return pull.pullAnswerSpace()
+  return pull.pullAll()
     .then(() => fsp.access(path.join(t.context.tempDir, 'answerSpace.json')), fs.R_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions')), fs.R_OK | fs.X_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions', 'test')), fs.R_OK | fs.X_OK)
