@@ -16,6 +16,7 @@
     "elegant-spinner": "1.0.1",
     "find-up": "1.1.0",
     "gauge": "1.2.5",
+    "glob": "6.0.4",
     "load-json-file": "1.1.0",
     "lodash.memoize": "4.0.1",
     "log-update": "1.0.2",
@@ -24,6 +25,7 @@
     "pify": "2.3.0",
     "prompt": "0.2.14",
     "request": "2.69.0",
+    "rimraf": "2.5.1",
     "update-notifier": "0.6.0",
     "write-json-file": "1.2.0"
   },

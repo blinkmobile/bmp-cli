@@ -43,7 +43,7 @@ test.beforeEach((t) => {
     });
 });
 
-test.serial('pullAnswerSpace', (t) => {
+test.serial('pullAll', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     switch (options.url) {
@@ -74,4 +74,61 @@ test.serial('pullAnswerSpace', (t) => {
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions')), fs.R_OK | fs.X_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions', 'test')), fs.R_OK | fs.X_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions', 'test', 'test.json')), fs.R_OK);
+});
+
+test.serial('pullAll --prune', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    switch (options.url) {
+      case `${ORIGIN}/_api/v1/dashboard`:
+        cb(null, { statusCode: 200 }, '{ "answerSpace": { "id": "123" } }');
+        break;
+
+      case `${ORIGIN}/_api/v1/answerspaces/123`:
+        cb(null, { statusCode: 200 }, `{
+            "answerspaces": {
+              "links": {
+                "interactions": [ "456", "789" ]
+              }
+            }
+          }`);
+        break;
+
+      case `${ORIGIN}/_api/v1/interactions/456`:
+        cb(null, { statusCode: 200 }, `{ "interactions": { "name": "def" } }`);
+        break;
+
+      case `${ORIGIN}/_api/v1/interactions/789`:
+        cb(null, { statusCode: 200 }, `{ "interactions": { "name": "ghi" } }`);
+        break;
+
+      default:
+        cb(new Error('unexpected fetch'));
+    }
+  };
+  return pull.pullAll()
+    .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
+    .then((entries) => t.same(entries, ['def', 'ghi']))
+    .then(() => {
+      const oldReqFn = reqFn;
+      reqFn = (options, cb) => {
+        switch (options.url) {
+          case `${ORIGIN}/_api/v1/answerspaces/123`:
+            cb(null, { statusCode: 200 }, `{
+                "answerspaces": {
+                  "links": {
+                    "interactions": [ "789" ]
+                  }
+                }
+              }`);
+            break;
+
+          default:
+            oldReqFn(options, cb);
+        }
+      };
+    })
+    .then(() => pull.pullAll({ prune: true }))
+    .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
+    .then((entries) => t.same(entries, ['ghi']));
 });

@@ -37,6 +37,7 @@ const help = `
   Getting work done:
     whoami          => double-check your authentication details
     pull            => download remote configuration to local files
+      --prune       => delete local files that are missing from remote
     deploy          => update remote configuration to match local files
 
   Creating new interactions:
