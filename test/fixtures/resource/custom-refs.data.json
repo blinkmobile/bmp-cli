@@ -1,0 +1,9 @@
+{
+  "id": "123",
+  "name": "abc",
+  "config": {
+    "default": {
+      "message": "<h1>abc</h1>"
+    }
+  }
+}
