@@ -19,6 +19,11 @@ const auth = require('../lib/auth');
 const deploy = require('../lib/deploy');
 const pkg = require('../package.json');
 
+// fixtures
+
+const oneInteraction = require('./fixtures/request/one-interaction');
+const noInteractions = require('./fixtures/request/no-interactions');
+
 // this module
 
 let reqFn;
@@ -44,21 +49,7 @@ test.beforeEach((t) => {
 });
 
 test.serial('deployAll', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (options, cb) => {
-    switch (options.url) {
-      case `${ORIGIN}/_api/v1/answerspaces/123`:
-        cb(null, { statusCode: 200 }, `{}`);
-        break;
-
-      case `${ORIGIN}/_api/v1/interactions/456`:
-        cb(null, { statusCode: 200 }, `{}`);
-        break;
-
-      default:
-        cb(new Error('unexpected fetch'));
-    }
-  };
+  reqFn = oneInteraction;
   return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
     id: '123'
   })
@@ -70,17 +61,7 @@ test.serial('deployAll', (t) => {
 });
 
 test.serial('deployAll no interactions', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (options, cb) => {
-    switch (options.url) {
-      case `${ORIGIN}/_api/v1/answerspaces/123`:
-        cb(null, { statusCode: 200 }, `{}`);
-        break;
-
-      default:
-        cb(new Error('unexpected fetch'));
-    }
-  };
+  reqFn = noInteractions;
   return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), { id: '123' })
     .then(() => deploy.deployAll());
 });

@@ -18,6 +18,12 @@ const auth = require('../lib/auth');
 const pkg = require('../package.json');
 const pull = require('../lib/pull');
 
+// fixtures
+
+const oneInteraction = require('./fixtures/request/one-interaction');
+const oneInteractionFormerlyTwo = require('./fixtures/request/one-interaction-formerly-two');
+const twoInteractions = require('./fixtures/request/two-interactions');
+
 // this module
 
 const fsp = pify(fs);
@@ -44,31 +50,7 @@ test.beforeEach((t) => {
 });
 
 test.serial('pullAll', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (options, cb) => {
-    switch (options.url) {
-      case `${ORIGIN}/_api/v1/dashboard`:
-        cb(null, { statusCode: 200 }, '{ "answerSpace": { "id": "123" } }');
-        break;
-
-      case `${ORIGIN}/_api/v1/answerspaces/123`:
-        cb(null, { statusCode: 200 }, `{
-            "answerspaces": {
-              "links": {
-                "interactions": [ "456" ]
-              }
-            }
-          }`);
-        break;
-
-      case `${ORIGIN}/_api/v1/interactions/456`:
-        cb(null, { statusCode: 200 }, `{ "interactions": { "name": "test" } }`);
-        break;
-
-      default:
-        cb(new Error('unexpected fetch'));
-    }
-  };
+  reqFn = oneInteraction;
   return pull.pullAll()
     .then(() => fsp.access(path.join(t.context.tempDir, 'answerSpace.json')), fs.R_OK)
     .then(() => fsp.access(path.join(t.context.tempDir, 'interactions')), fs.R_OK | fs.X_OK)
@@ -77,56 +59,12 @@ test.serial('pullAll', (t) => {
 });
 
 test.serial('pullAll --prune', (t) => {
-  const ORIGIN = 'https://example.com';
-  reqFn = (options, cb) => {
-    switch (options.url) {
-      case `${ORIGIN}/_api/v1/dashboard`:
-        cb(null, { statusCode: 200 }, '{ "answerSpace": { "id": "123" } }');
-        break;
-
-      case `${ORIGIN}/_api/v1/answerspaces/123`:
-        cb(null, { statusCode: 200 }, `{
-            "answerspaces": {
-              "links": {
-                "interactions": [ "456", "789" ]
-              }
-            }
-          }`);
-        break;
-
-      case `${ORIGIN}/_api/v1/interactions/456`:
-        cb(null, { statusCode: 200 }, `{ "interactions": { "name": "def" } }`);
-        break;
-
-      case `${ORIGIN}/_api/v1/interactions/789`:
-        cb(null, { statusCode: 200 }, `{ "interactions": { "name": "ghi" } }`);
-        break;
-
-      default:
-        cb(new Error('unexpected fetch'));
-    }
-  };
+  reqFn = twoInteractions;
   return pull.pullAll()
     .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
     .then((entries) => t.same(entries, ['def', 'ghi']))
     .then(() => {
-      const oldReqFn = reqFn;
-      reqFn = (options, cb) => {
-        switch (options.url) {
-          case `${ORIGIN}/_api/v1/answerspaces/123`:
-            cb(null, { statusCode: 200 }, `{
-                "answerspaces": {
-                  "links": {
-                    "interactions": [ "789" ]
-                  }
-                }
-              }`);
-            break;
-
-          default:
-            oldReqFn(options, cb);
-        }
-      };
+      reqFn = oneInteractionFormerlyTwo;
     })
     .then(() => pull.pullAll({ prune: true }))
     .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
