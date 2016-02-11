@@ -22,6 +22,8 @@ blinkm bmp --help
 bm bmp --help
 ```
 
+We recommend that you skim our [suggested usage](docs/suggested-usage.md).
+
 
 ## Environment Variables
 
