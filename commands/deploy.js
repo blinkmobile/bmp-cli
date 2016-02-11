@@ -16,7 +16,7 @@ module.exports = function (input, flags, options) {
 
   progress.on('change', (name, completed) => gauge.show('deploy', completed));
 
-  return deploy.deployAll()
+  return deploy.deployAll({ prune: !!flags.prune })
     .then(() => {
       progress.finish();
       gauge.hide();
