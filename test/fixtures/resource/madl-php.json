@@ -1,0 +1,9 @@
+{
+  "config": {
+    "default": {
+      "madl": {
+        "$file": "madltest.madl.php"
+      }
+    }
+  }
+}
