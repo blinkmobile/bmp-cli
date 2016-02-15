@@ -23,6 +23,9 @@ const resource = require('../lib/resource');
 const customRefs = require('./fixtures/resource/custom-refs.json');
 const customRefsData = require('./fixtures/resource/custom-refs.data.json');
 
+const madlPhp = require('./fixtures/resource/madl-php.json');
+const madlPhpData = require('./fixtures/resource/madl-php.data.json');
+
 // this module
 
 const fsp = pify(fs);
@@ -72,7 +75,7 @@ test('fixInteraction with null order', (t) => {
 });
 
 test.serial('writeInteraction with existing custom $file references', (t) => {
-  const NAME = 'abc';
+  const NAME = customRefsData.name;
   return writeJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`), customRefs)
     .then(() => resource.writeInteraction({
       cwd: t.context.tempDir,
@@ -82,5 +85,21 @@ test.serial('writeInteraction with existing custom $file references', (t) => {
     .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))
     .then((data) => t.same(data.config.default.message, customRefs.config.default.message))
     .then(() => fsp.readFile(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.message.html`), 'utf8'))
-    .then((message) => t.is(message, '<h1>abc</h1>'));
+    .then((code) => t.is(code, customRefsData.config.default.message));
+});
+
+test.serial('writeInteraction multiple times with PHP open tags', (t) => {
+  const NAME = madlPhpData.name;
+  const performWrite = () => resource.writeInteraction({
+    cwd: t.context.tempDir,
+    data: madlPhpData,
+    name: NAME
+  });
+  return performWrite()
+    .then(() => performWrite())
+    .then(() => performWrite())
+    .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))
+    .then((data) => t.same(data.config.default.madl, madlPhp.config.default.madl))
+    .then(() => fsp.readFile(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.madl.php`), 'utf8'))
+    .then((code) => t.is(code, madlPhpData.config.default.madl));
 });

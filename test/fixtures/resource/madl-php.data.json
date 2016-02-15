@@ -1,0 +1,9 @@
+{
+  "id": "123",
+  "name": "madltest",
+  "config": {
+    "default": {
+      "madl": "?><?php\nprint_r($_REQUEST);\n"
+    }
+  }
+}
