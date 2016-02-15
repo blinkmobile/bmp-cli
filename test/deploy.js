@@ -23,6 +23,7 @@ const pkg = require('../package.json');
 
 const oneInteraction = require('./fixtures/request/one-interaction');
 const noInteractions = require('./fixtures/request/no-interactions');
+const twoInteractions = require('./fixtures/request/two-interactions');
 
 // this module
 
@@ -64,4 +65,29 @@ test.serial('deployAll no interactions', (t) => {
   reqFn = noInteractions;
   return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), { id: '123' })
     .then(() => deploy.deployAll());
+});
+
+test.serial('deployAll --prune', (t) => {
+  reqFn = (options, cb) => {
+    const ORIGIN = 'https://example.com';
+    switch (options.url) {
+      case `${ORIGIN}/_api/v1/interactions/789`:
+        t.is(options.method, 'DELETE');
+        cb(null, { statusCode: 204 }, '{}');
+        break;
+
+      default:
+        t.ok(~['GET', 'PUT'].indexOf(options.method));
+        return twoInteractions(options, cb);
+    }
+  };
+  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+    id: '123'
+  })
+    .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'def')))
+    .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'def', 'def.json'), {
+      id: '456',
+      name: 'def'
+    }))
+    .then(() => deploy.deployAll({ prune: true }));
 });
