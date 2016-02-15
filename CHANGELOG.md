@@ -1,7 +1,31 @@
 # Change Log
 
 
-## [0.3.0] - 2016-02-05
+## 0.4.0 - 2016-02-15
+
+
+### Added
+
+- BC-10: display progress bars during `pull` and `deploy` (#9, @jokeyrhyme) (fixes #4)
+
+- BC-11: `blinkm bmp pull --prune` deletes local files missing on remote (#11, @jokeyrhyme)
+
+- BC-15: `blinkm bmp deploy --prune` (#12, @jokeyrhyme)
+
+- BC-13: able to create interactions via CLI with no actions within CMS (#10, @jokeyrhyme)
+
+    - all interactions created this way have "display" set to "hide" to avoid visible disruption to BIC end-users (avoids unfinished interactions showing up in generated lists)
+
+    - `blinkm bmp create interaction <name>`  creates a new hidden+active interaction locally
+
+        - `--type=<type>` where type can be "madl" (default), or "message"
+
+        - `--remote` create a remote placeholder
+
+- copy `--help` documentation out to README.md
+
+
+## 0.3.0 - 2016-02-05
 
 
 ### Added
