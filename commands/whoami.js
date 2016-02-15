@@ -2,19 +2,16 @@
 
 // foreign modules
 
-const pify = require('pify');
-const async = require('async');
 const elegantSpinner = require('elegant-spinner');
 const logUpdate = require('log-update');
 
 // local modules
 
 const auth = require('../lib/auth');
+const asyncp = require('../lib/utils/asyncp');
 const whoami = require('../lib/whoami');
 
 // this module
-
-const pasync = pify(require('async'));
 
 function logAuthLookup (options) {
   const frame = elegantSpinner();
@@ -36,7 +33,7 @@ module.exports = function (input, flags, options) {
   auth.readAll()
     .then((auths) => {
       if (auths.length) {
-        return pasync.eachSeries(auths, async.asyncify(logAuthLookup));
+        return asyncp.eachSeries(auths, asyncp.asyncify(logAuthLookup));
       }
       console.log('no authentication data found');
     });

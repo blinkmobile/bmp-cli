@@ -16,7 +16,7 @@ module.exports = function (input, flags, options) {
 
   progress.on('change', (name, completed) => gauge.show('pull', completed));
 
-  return pull.pullAll()
+  return pull.pullAll({ prune: !!flags.prune })
     .then(() => {
       progress.finish();
       gauge.hide();

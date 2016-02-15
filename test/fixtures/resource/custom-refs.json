@@ -1,0 +1,9 @@
+{
+  "config": {
+    "default": {
+      "message": {
+        "$file": "abc.message.html"
+      }
+    }
+  }
+}

@@ -15,7 +15,10 @@ const cli = meow({
   help: main.help,
   version: true
 }, {
-  boolean: [ 'remote' ],
+  boolean: [
+    'prune',
+    'remote'
+  ],
   type: [ 'type' ]
 });
 
