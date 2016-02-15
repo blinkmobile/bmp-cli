@@ -39,6 +39,7 @@ test.beforeEach((t) => {
 test.serial('getDashboard', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
+    t.is(options.method, 'GET');
     t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
     cb(null, { statusCode: 200 }, '{}');
   };
@@ -48,11 +49,39 @@ test.serial('getDashboard', (t) => {
 test.serial('getResource', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
+    t.is(options.method, 'GET');
     t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.getResource({
     id: 123,
     type: 'answerspaces'
+  });
+});
+
+test.serial('putResource with id', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'PUT');
+    t.is(options.url, `${ORIGIN}/_api/v1/interactions/123`);
+    cb(null, { statusCode: 200 }, '{}');
+  };
+  return api.putResource({
+    id: 123,
+    data: { id: 123 },
+    type: 'interactions'
+  });
+});
+
+test.serial('putResource without id', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'POST');
+    t.is(options.url, `${ORIGIN}/_api/v1/interactions`);
+    cb(null, { statusCode: 200 }, '{}');
+  };
+  return api.putResource({
+    data: {},
+    type: 'interactions'
   });
 });

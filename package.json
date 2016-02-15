@@ -17,6 +17,7 @@
     "find-up": "1.1.0",
     "gauge": "1.2.5",
     "load-json-file": "1.1.0",
+    "lodash.memoize": "4.0.1",
     "log-update": "1.0.2",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",

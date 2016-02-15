@@ -8,7 +8,7 @@ const updateNotifier = require('update-notifier');
 
 const commands = {
   deploy: require('./commands/deploy'),
-  interaction: require('./commands/interaction'),
+  create: require('./commands/create'),
   login: require('./commands/login'),
   logout: require('./commands/logout'),
   pull: require('./commands/pull'),
@@ -23,21 +23,27 @@ const pkg = require('./package.json');
 updateNotifier({ pkg }).notify();
 
 const help = `
-  Usage: blinkm-bmp <command>
+  Usage: blinkm bmp <command>
 
   where <command> is one of:
     ${Object.keys(commands).join(', ')}
 
-  Getting started:
-    scope         => outputs the current scope
-    scope [<url>] => sets the current URL scope
-    login         => store credentials on this machine
-    logout        => remove credentials from this machine
-    pull          => download remote configuration to local files
+  Initial settings:
+    scope           => outputs the current scope
+    scope [<url>]   => sets the current URL scope
+    login           => store credentials on this machine
+    logout          => remove credentials from this machine
 
   Getting work done:
-    whoami        => double-check your authentication details
-    deploy        => update remote configuration to match local files
+    whoami          => double-check your authentication details
+    pull            => download remote configuration to local files
+    deploy          => update remote configuration to match local files
+
+  Creating new interactions:
+    create interaction <name>
+                    => creates a new hidden+active interaction locally
+      --type=<type> => type can be "madl" (default), or "message"
+      --remote      => immediately create a remote placeholder
 `;
 
 module.exports = function (input, flags) {
