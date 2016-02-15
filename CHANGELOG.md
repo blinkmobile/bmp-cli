@@ -25,6 +25,11 @@
 - copy `--help` documentation out to README.md
 
 
+### Changed
+
+- BC-11: `blinkm bmp pull` (regardless of `--prune`) preserves existing / customised "$file" references in local files (#11, @jokeyrhyme)
+
+
 ## 0.3.0 - 2016-02-05
 
 
