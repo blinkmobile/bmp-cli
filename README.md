@@ -22,24 +22,26 @@ blinkm bmp --help
 bm bmp --help
 ```
 
->  Initial settings:
->    scope           => outputs the current scope
->    scope [<url>]   => sets the current URL scope
->    login           => store credentials on this machine
->    logout          => remove credentials from this machine
->
->  Getting work done:
->    whoami          => double-check your authentication details
->    pull            => download remote configuration to local files
->      --prune       => delete local files that are absent from remote
->    deploy          => update remote configuration to match local files
->      --prune       => delete remote interactions that are absent locally
->
->  Creating new interactions:
->    create interaction <name>
->                    => creates a new hidden+active interaction locally
->      --type=<type> => type can be "madl" (default), or "message"
->      --remote      => also create a remote placeholder
+```
+  Initial settings:
+    scope           => outputs the current scope
+    scope [<url>]   => sets the current URL scope
+    login           => store credentials on this machine
+    logout          => remove credentials from this machine
+
+  Getting work done:
+    whoami          => double-check your authentication details
+    pull            => download remote configuration to local files
+      --prune       => delete local files that are absent from remote
+    deploy          => update remote configuration to match local files
+      --prune       => delete remote interactions that are absent locally
+
+  Creating new interactions:
+    create interaction <name>
+                    => creates a new hidden+active interaction locally
+      --type=<type> => type can be "madl" (default), or "message"
+      --remote      => also create a remote placeholder
+```
 
 We recommend that you skim our [suggested usage](docs/suggested-usage.md).
 
