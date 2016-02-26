@@ -1,6 +1,21 @@
 # Change Log
 
 
+## 0.5.0 - 2016-02-26
+
+
+### Changed
+
+- BC-20: extract config file management for use in other CLIs (#14, @jokeyrhyme)
+
+    - https://github.com/blinkmobile/blinkmrc.js
+
+
+### Fixed
+
+- BC-18: do not attempt to deploy extra files, e.g. .DS_Store, etc (#15, @jokeyrhyme)
+
+
 ## 0.4.0 - 2016-02-15
 
 
