@@ -9,6 +9,7 @@
     "url": "https://github.com/blinkmobile/bmp-cli/issues"
   },
   "dependencies": {
+    "@blinkmobile/blinkmrc": "1.1.0",
     "@blinkmobile/json-as-files": "1.0.0",
     "appdirectory": "0.1.0",
     "are-we-there-yet": "1.1.1",
