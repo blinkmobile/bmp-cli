@@ -56,7 +56,8 @@ test.serial('deployAll', (t) => {
   })
     .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'test')))
     .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'test', 'test.json'), {
-      id: '456'
+      id: '456',
+      name: 'test'
     }))
     .then(() => deploy.deployAll());
 });
@@ -90,4 +91,24 @@ test.serial('deployAll --prune', (t) => {
       name: 'def'
     }))
     .then(() => deploy.deployAll({ prune: true }));
+});
+
+test.serial('deployAll with .DS_Store files', (t) => {
+  const tempDir = t.context.tempDir;
+  reqFn = oneInteraction;
+  return Promise.all([
+    writeJson(path.join(tempDir, 'answerSpace.json'), {
+      id: '123'
+    }),
+    writeJson(path.join(tempDir, 'interactions', 'test', 'test.json'), {
+      id: '456',
+      name: 'test'
+    })
+  ])
+    .then(() => Promise.all([
+      writeJson(path.join(tempDir, '.DS_Store'), {}),
+      writeJson(path.join(tempDir, 'interactions', '.DS_Store'), {}),
+      writeJson(path.join(tempDir, 'interactions', 'test', '.DS_Store'), {})
+    ]))
+    .then(() => deploy.deployAll());
 });
