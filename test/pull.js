@@ -70,3 +70,11 @@ test.serial('pullAll --prune', (t) => {
     .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
     .then((entries) => t.same(entries, ['ghi']));
 });
+
+test.serial('pullAll with scope-content mismatch', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'deploy', 'mismatch');
+  process.env.BMP_WORKING_DIR = fixturePath;
+  process.env.BMP_SCOPE = ''; // rely on .blinkmrc.json file
+  reqFn = (opts, cb) => { cb(new Error('unexpected fetch')); };
+  t.throws(pull.pullAll(), /scope-content mismatch/);
+});

@@ -112,3 +112,11 @@ test.serial('deployAll with .DS_Store files', (t) => {
     ]))
     .then(() => deploy.deployAll());
 });
+
+test.serial('deployAll with scope-content mismatch', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'deploy', 'mismatch');
+  process.env.BMP_WORKING_DIR = fixturePath;
+  process.env.BMP_SCOPE = ''; // rely on .blinkmrc.json file
+  reqFn = (opts, cb) => { cb(new Error('unexpected fetch')); };
+  t.throws(deploy.deployAll(), /scope-content mismatch/);
+});
