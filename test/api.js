@@ -51,12 +51,25 @@ test.serial('getResource', (t) => {
   reqFn = (options, cb) => {
     t.is(options.method, 'GET');
     t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
-    cb(null, { statusCode: 200 }, '{}');
+    cb(null, { statusCode: 200 }, '{"answerspaces":{"id":"123"}}');
   };
   return api.getResource({
-    id: 123,
+    id: '123',
     type: 'answerspaces'
   });
+});
+
+test.serial('getResource with result mismatch', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'GET');
+    t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
+    cb(null, { statusCode: 200 }, '{"answerspaces":{"id":"456"}}');
+  };
+  t.throws(api.getResource({
+    id: '123',
+    type: 'answerspaces'
+  }), /request-result mismatch/);
 });
 
 test.serial('putResource with id', (t) => {
@@ -67,8 +80,8 @@ test.serial('putResource with id', (t) => {
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.putResource({
-    id: 123,
-    data: { id: 123 },
+    id: '123',
+    data: { id: '123' },
     type: 'interactions'
   });
 });

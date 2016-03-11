@@ -11,6 +11,7 @@ module.exports = (options, cb) => {
     case `${ORIGIN}/_api/v1/answerspaces/123`:
       cb(null, { statusCode: 200 }, `{
           "answerspaces": {
+            "id": "123",
             "links": {
               "interactions": [ "456", "789" ]
             }
@@ -19,11 +20,21 @@ module.exports = (options, cb) => {
       break;
 
     case `${ORIGIN}/_api/v1/interactions/456`:
-      cb(null, { statusCode: 200 }, `{ "interactions": { "name": "def" } }`);
+      cb(null, { statusCode: 200 }, `{
+        "interactions": {
+          "id": "456",
+          "name": "def"
+        }
+      }`);
       break;
 
     case `${ORIGIN}/_api/v1/interactions/789`:
-      cb(null, { statusCode: 200 }, `{ "interactions": { "name": "ghi" } }`);
+      cb(null, { statusCode: 200 }, `{
+        "interactions": {
+          "id": "789",
+          "name": "ghi"
+        }
+      }`);
       break;
 
     default:
