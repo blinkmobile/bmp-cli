@@ -1,6 +1,22 @@
 # Change Log
 
 
+## 0.5.1 - 2016-03-11
+
+
+### Fixed
+
+- BC-22: `pull` and `deploy` commands abort if the target scope does not match the "name" field in the primary JSON file (#16, @jokeyrhyme)
+
+    - prevents further data-loss in cases of corrupted local files or unexpected scope changes
+
+- BC-22: GET requests fail if the result's ID doesn't match the requested ID
+
+    - prevents corruption of local files
+
+- the progress bar during `deploy` works again (broken during BC-18, #15)
+
+
 ## 0.5.0 - 2016-02-26
 
 
