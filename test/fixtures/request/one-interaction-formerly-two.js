@@ -13,6 +13,7 @@ module.exports = (options, cb) => {
     case `${ORIGIN}/_api/v1/answerspaces/123`:
       cb(null, { statusCode: 200 }, `{
           "answerspaces": {
+            "id": "123",
             "links": {
               "interactions": [ "789" ]
             }
