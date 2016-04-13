@@ -4,22 +4,19 @@ const ORIGIN = 'https://example.com';
 
 module.exports = (options, cb) => {
   switch (options.url) {
-    case `${ORIGIN}/_api/v1/dashboard`:
-      cb(null, { statusCode: 200 }, '{ "answerSpace": { "id": "123" } }');
-      break;
-
-    case `${ORIGIN}/_api/v1/answerspaces/123`:
+    case `${ORIGIN}/_api/v2/answerspaces/space`:
       cb(null, { statusCode: 200 }, `{
           "answerspaces": {
             "id": "123",
             "links": {
               "interactions": [ "456", "789" ]
-            }
+            },
+            "name": "space"
           }
         }`);
       break;
 
-    case `${ORIGIN}/_api/v1/interactions/456`:
+    case `${ORIGIN}/_api/v2/answerspaces/space/interactions/456`:
       cb(null, { statusCode: 200 }, `{
         "interactions": {
           "id": "456",
@@ -28,7 +25,7 @@ module.exports = (options, cb) => {
       }`);
       break;
 
-    case `${ORIGIN}/_api/v1/interactions/789`:
+    case `${ORIGIN}/_api/v2/answerspaces/space/interactions/789`:
       cb(null, { statusCode: 200 }, `{
         "interactions": {
           "id": "789",
@@ -38,6 +35,6 @@ module.exports = (options, cb) => {
       break;
 
     default:
-      cb(new Error('unexpected fetch'));
+      cb(new Error(`unexpected fetch: ${JSON.stringify(options)}`));
   }
 };

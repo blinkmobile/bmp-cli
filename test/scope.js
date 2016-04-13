@@ -29,7 +29,6 @@ test.beforeEach((t) => {
 test.serial('read missing .blinkmrc.json', (t) => {
   return lib.read()
     .then((result) => {
-      console.log(result);
       t.fail();
     })
     .catch((err) => {

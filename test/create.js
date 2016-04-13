@@ -75,7 +75,7 @@ test.serial('newInteraction madl remote', (t) => {
   reqFn = (options, cb) => {
     isSubmitted = true;
     switch (options.url) {
-      case `${ORIGIN}/_api/v1/interactions`:
+      case `${ORIGIN}/_api/v2/answerspaces/space/interactions`:
         t.falsy(options.body.interactions.id);
         t.is(options.body.interactions.links.answerspaces, '123');
         cb(null, { statusCode: 201 }, JSON.stringify({
@@ -84,11 +84,12 @@ test.serial('newInteraction madl remote', (t) => {
         break;
 
       default:
-        cb(new Error('unexpected fetch'));
+        cb(new Error(`unexpected fetch: ${JSON.stringify(options)}`));
     }
   };
   return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
-    id: '123'
+    id: '123',
+    name: 'space'
   })
     .then(() => create.newInteraction({ name: NAME, remote: true, type: 'madl' }))
     .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))

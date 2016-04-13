@@ -52,7 +52,8 @@ test.beforeEach((t) => {
 test.serial('deployAll', (t) => {
   reqFn = oneInteraction;
   return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
-    id: '123'
+    id: '123',
+    name: 'space'
   })
     .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'test')))
     .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'test', 'test.json'), {
@@ -64,7 +65,10 @@ test.serial('deployAll', (t) => {
 
 test.serial('deployAll no interactions', (t) => {
   reqFn = noInteractions;
-  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), { id: '123' })
+  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+    id: '123',
+    name: 'space'
+  })
     .then(() => deploy.deployAll());
 });
 
@@ -72,7 +76,7 @@ test.serial('deployAll --prune', (t) => {
   reqFn = (options, cb) => {
     const ORIGIN = 'https://example.com';
     switch (options.url) {
-      case `${ORIGIN}/_api/v1/interactions/789`:
+      case `${ORIGIN}/_api/v2/answerspaces/space/interactions/789`:
         t.is(options.method, 'DELETE');
         cb(null, { statusCode: 204 }, '{}');
         break;
@@ -83,7 +87,8 @@ test.serial('deployAll --prune', (t) => {
     }
   };
   return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
-    id: '123'
+    id: '123',
+    name: 'space'
   })
     .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'def')))
     .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'def', 'def.json'), {
@@ -98,7 +103,8 @@ test.serial('deployAll with .DS_Store files', (t) => {
   reqFn = oneInteraction;
   return Promise.all([
     writeJson(path.join(tempDir, 'answerSpace.json'), {
-      id: '123'
+      id: '123',
+      name: 'space'
     }),
     writeJson(path.join(tempDir, 'interactions', 'test', 'test.json'), {
       id: '456',
