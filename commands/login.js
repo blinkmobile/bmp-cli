@@ -61,9 +61,9 @@ module.exports = function (input, flags, options) {
     .catch((err) => {
       if (err.message === '401') {
         console.error(`denied access to ${currentScope}, try a new token`);
-      } else {
-        console.error(err);
+        return auth.logout();
       }
+      console.error(err);
       process.exit(1);
     });
 };
