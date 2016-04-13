@@ -12,8 +12,7 @@ const commands = {
   login: require('./commands/login'),
   logout: require('./commands/logout'),
   pull: require('./commands/pull'),
-  scope: require('./commands/scope'),
-  whoami: require('./commands/whoami')
+  scope: require('./commands/scope')
 };
 
 const pkg = require('./package.json');
@@ -35,7 +34,6 @@ const help = `
     logout          => remove credentials from this machine
 
   Getting work done:
-    whoami          => double-check your authentication details
     pull            => download remote configuration to local files
       --prune       => delete local files that are absent from remote
     deploy          => update remote configuration to match local files

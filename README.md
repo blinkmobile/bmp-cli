@@ -30,7 +30,6 @@ bm bmp --help
     logout          => remove credentials from this machine
 
   Getting work done:
-    whoami          => double-check your authentication details
     pull            => download remote configuration to local files
       --prune       => delete local files that are absent from remote
     deploy          => update remote configuration to match local files

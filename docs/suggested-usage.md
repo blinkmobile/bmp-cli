@@ -78,11 +78,7 @@
 
     - `blinkm bmp scope`
 
-3. double-check that you have authenticated as expected
-
-    - `blinkm bmp whoami`
-
-4. send your local project files to our service for immediate deployment
+3. send your local project files to our service for immediate deployment
 
     - `blinkm bmp deploy`
 
