@@ -36,6 +36,37 @@ test.beforeEach((t) => {
     });
 });
 
+test.serial('getAuthStatus 200 => CREDS_GOOD', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'GET');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    cb(null, { statusCode: 200 }, '{}');
+  };
+  return api.getAuthStatus()
+    .then((status) => t.is(status, api.CREDS_GOOD));
+});
+
+test.serial('getAuthStatus 401 => CREDS_BAD', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'GET');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    cb(null, { statusCode: 401 }, '{}');
+  };
+  return api.getAuthStatus()
+    .then((status) => t.is(status, api.CREDS_BAD));
+});
+
+test.serial('logout then getAuthStatus => CREDS_MISSING', (t) => {
+  reqFn = (options, cb) => {
+    cb(new Error('unexpected call'));
+  };
+  return auth.logout()
+    .then(() => api.getAuthStatus())
+    .then((status) => t.is(status, api.CREDS_MISSING));
+});
+
 test.serial('getDashboard', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {

@@ -8,7 +8,6 @@ const prompt = require('prompt');
 
 const api = require('../lib/api.js');
 const auth = require('../lib/auth');
-const getPathSegment = require('../lib/utils/url.js').getPathSegment;
 const isValidJWT = require('../lib/utils/jwt.js').isValidJWT;
 const scope = require('../lib/scope');
 
@@ -46,23 +45,24 @@ function getCredential (input) {
 }
 
 module.exports = function (input, flags, options) {
-  let uid = '';
   let currentScope = '';
   scope.read()
     .then((s) => {
       currentScope = s;
-      uid = getPathSegment(s, 1);
     })
     .catch(() => Promise.reject(new Error('must set project scope first')))
     .then(() => getCredential(input))
     .then((credential) => auth.login({ credential }))
-    .then(() => api.getAnswerSpaceV2({ name: uid }))
-    .then(() => console.log(`successfully authorised for ${currentScope}`))
-    .catch((err) => {
-      if (err.message === '401') {
-        console.error(`denied access to ${currentScope}, try a new token`);
-        return auth.logout();
+    .then(() => api.getAuthStatus())
+    .then((status) => {
+      if (status === api.CREDS_GOOD) {
+        console.log(`authorised for ${currentScope}`);
+        return;
       }
+      console.error(`denied access to ${currentScope}, try a new token`);
+      return auth.logout();
+    })
+    .catch((err) => {
       console.error(err);
       process.exit(1);
     });

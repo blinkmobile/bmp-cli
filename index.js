@@ -28,7 +28,7 @@ const help = `
     ${Object.keys(commands).join(', ')}
 
   Initial settings:
-    scope           => outputs the current scope
+    scope           => outputs the current scope and login status
     scope [<url>]   => sets the current URL scope
     login           => store credentials on this machine
     logout          => remove credentials from this machine
