@@ -7,6 +7,7 @@ const prompt = require('prompt');
 // local modules
 
 const auth = require('../lib/auth');
+const isValidJWT = require('../lib/utils/jwt.js').isValidJWT;
 const scope = require('../lib/scope');
 
 // this module
@@ -17,8 +18,11 @@ function promptCredential () {
     prompt.get({
       properties: {
         credential: {
+          conform: (string) => isValidJWT(string),
+          description: 'token',
           hidden: true,
-          message: 'token or cookie, input is hidden',
+          message: 'must be a valid JSON Web Token (JWT)',
+          replace: '*',
           required: true
         }
       }
