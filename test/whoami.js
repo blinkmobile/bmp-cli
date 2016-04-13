@@ -49,7 +49,7 @@ test.serial('lookupUser, 200', (t) => {
 test.serial('lookupUser for HTTP scope, 200', (t) => {
   process.env.BMP_SCOPE = 'http://example.com/space';
   reqFn = (options, cb) => {
-    t.is(options.url, `https://example.com/_api/v1/dashboard`);
+    t.is(options.url, 'https://example.com/_api/v1/dashboard');
     cb(null, { statusCode: 200 }, '{}');
   };
   return whoami.lookupUser();

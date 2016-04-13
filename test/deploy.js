@@ -78,7 +78,7 @@ test.serial('deployAll --prune', (t) => {
         break;
 
       default:
-        t.ok(~['GET', 'PUT'].indexOf(options.method));
+        t.truthy(~['GET', 'PUT'].indexOf(options.method));
         return twoInteractions(options, cb);
     }
   };

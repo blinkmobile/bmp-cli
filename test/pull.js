@@ -62,13 +62,13 @@ test.serial('pullAll --prune', (t) => {
   reqFn = twoInteractions;
   return pull.pullAll()
     .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
-    .then((entries) => t.same(entries, ['def', 'ghi']))
+    .then((entries) => t.deepEqual(entries, ['def', 'ghi']))
     .then(() => {
       reqFn = oneInteractionFormerlyTwo;
     })
     .then(() => pull.pullAll({ prune: true }))
     .then(() => fsp.readdir(path.join(t.context.tempDir, 'interactions')))
-    .then((entries) => t.same(entries, ['ghi']));
+    .then((entries) => t.deepEqual(entries, ['ghi']));
 });
 
 test.serial('pullAll with scope-content mismatch', (t) => {

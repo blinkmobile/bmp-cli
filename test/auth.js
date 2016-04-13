@@ -35,7 +35,7 @@ test.serial('login without setting scope first', (t) => {
   return auth.login({
     credential: 'abcdef'
   })
-    .catch((err) => { t.ok(err); });
+    .catch((err) => { t.truthy(err); });
 });
 
 test.serial('login with scope', (t) => {
@@ -56,7 +56,7 @@ test.serial('logout without login first', (t) => {
   })
     .then(() => loadJson(CONFIG_FILE))
     .catch((err) => {
-      t.ok(err);
+      t.truthy(err);
     });
 });
 
@@ -68,14 +68,14 @@ test.serial('login then logout', (t) => {
     .then(() => auth.logout())
     .then(() => loadJson(CONFIG_FILE))
     .then((cfg) => {
-      t.ok(!cfg.bmp['https://example.com'].credential);
+      t.truthy(!cfg.bmp['https://example.com'].credential);
     });
 });
 
 test.serial('read, after login', (t) => {
   return auth.login({ credential: 'abcdef' })
     .then(() => auth.read())
-    .then((a) => t.same(a, { origin: 'https://example.com', credential: 'abcdef' }));
+    .then((a) => t.deepEqual(a, { origin: 'https://example.com', credential: 'abcdef' }));
 });
 
 test.serial('read, after login and logout', (t) => {
@@ -83,7 +83,7 @@ test.serial('read, after login and logout', (t) => {
     .then(() => auth.logout())
     .then(() => auth.read())
     .then(() => t.fail('resolved'))
-    .catch((err) => t.ok(err));
+    .catch((err) => t.truthy(err));
 });
 
 test.serial('read, no blinkmrc.json file', (t) => {
@@ -92,7 +92,7 @@ test.serial('read, no blinkmrc.json file', (t) => {
       scope: 'https://example.com/space',
       userConfigDir: t.context.tempDir
     }))
-    .catch((err) => t.ok(err));
+    .catch((err) => t.truthy(err));
 });
 
 test.serial('read, corrupt blinkmrc.json file', (t) => {
@@ -101,7 +101,7 @@ test.serial('read, corrupt blinkmrc.json file', (t) => {
       scope: 'https://example.com/space',
       userConfigDir: t.context.tempDir
     }))
-    .catch((err) => t.ok(err));
+    .catch((err) => t.truthy(err));
 });
 
 test.serial('readAll', (t) => {
@@ -113,7 +113,7 @@ test.serial('readAll', (t) => {
     })
     .then(() => auth.readAll())
     .then((auths) => {
-      t.same(auths, [
+      t.deepEqual(auths, [
         { origin: 'https://example.com', credential: 'abcdef' },
         { origin: 'https://otherexample.com', credential: 'ghijkl' }
       ]);

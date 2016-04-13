@@ -48,7 +48,7 @@ test.serial('newInteraction madl', (t) => {
   return create.newInteraction({ name: NAME, type: 'madl' })
     .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))
     .then((data) => {
-      t.notOk(data.id);
+      t.falsy(data.id);
       t.is(data.name, NAME);
       t.is(data.config.all.type, 'madl code');
       t.is(data.config.default.display, 'hide');
@@ -60,7 +60,7 @@ test.serial('newInteraction message', (t) => {
   return create.newInteraction({ name: NAME, type: 'message' })
     .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))
     .then((data) => {
-      t.notOk(data.id);
+      t.falsy(data.id);
       t.is(data.name, NAME);
       t.is(data.config.all.type, 'message');
       t.is(data.config.default.display, 'hide');
@@ -76,7 +76,7 @@ test.serial('newInteraction madl remote', (t) => {
     isSubmitted = true;
     switch (options.url) {
       case `${ORIGIN}/_api/v1/interactions`:
-        t.notOk(options.body.interactions.id);
+        t.falsy(options.body.interactions.id);
         t.is(options.body.interactions.links.answerspaces, '123');
         cb(null, { statusCode: 201 }, JSON.stringify({
           interactions: { id: '456', name: NAME }
@@ -93,7 +93,7 @@ test.serial('newInteraction madl remote', (t) => {
     .then(() => create.newInteraction({ name: NAME, remote: true, type: 'madl' }))
     .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))
     .then((data) => {
-      t.ok(isSubmitted);
+      t.truthy(isSubmitted);
       t.is(data.id, '456');
       t.is(data.name, NAME);
     });
