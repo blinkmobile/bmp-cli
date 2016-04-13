@@ -8,6 +8,7 @@ const prompt = require('prompt');
 
 const api = require('../lib/api.js');
 const auth = require('../lib/auth');
+const error = require('../lib/error');
 const isValidJWT = require('../lib/utils/jwt.js').isValidJWT;
 const scope = require('../lib/scope');
 
@@ -63,6 +64,7 @@ module.exports = function (input, flags, options) {
       return auth.logout();
     })
     .catch((err) => {
+      error.handle404(err);
       console.error(err);
       process.exit(1);
     });

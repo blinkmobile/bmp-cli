@@ -3,6 +3,7 @@
 // local modules
 
 const api = require('../lib/api.js');
+const error = require('../lib/error');
 const scope = require('../lib/scope');
 
 // this module
@@ -26,6 +27,7 @@ module.exports = function (input, flags, options) {
     .then((status) => console.log(`${currentScope}: ${status}`))
     .catch((err) => {
       console.error(err);
+      error.handle404(err);
       process.exit(1);
     });
 };
