@@ -24,13 +24,12 @@ bm bmp --help
 
 ```
   Initial settings:
-    scope           => outputs the current scope
+    scope           => outputs the current scope and login status
     scope [<url>]   => sets the current URL scope
     login           => store credentials on this machine
     logout          => remove credentials from this machine
 
   Getting work done:
-    whoami          => double-check your authentication details
     pull            => download remote configuration to local files
       --prune       => delete local files that are absent from remote
     deploy          => update remote configuration to match local files

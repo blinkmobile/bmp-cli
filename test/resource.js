@@ -43,8 +43,8 @@ test('fixAnswerSpace', (t) => {
     sitemap: ''
   };
   const output = resource.fixAnswerSpace(input);
-  t.ok(input === output, 'mutates input object');
-  t.same(output, {});
+  t.truthy(input === output, 'mutates input object');
+  t.deepEqual(output, {});
 });
 
 test('fixInteraction', (t) => {
@@ -55,8 +55,8 @@ test('fixInteraction', (t) => {
     order: 1
   };
   const output = resource.fixInteraction(input);
-  t.ok(input === output, 'mutates input object');
-  t.same(output, { order: 1 });
+  t.truthy(input === output, 'mutates input object');
+  t.deepEqual(output, { order: 1 });
 });
 
 test('fixInteraction with null order', (t) => {
@@ -67,8 +67,8 @@ test('fixInteraction with null order', (t) => {
     order: null
   };
   const output = resource.fixInteraction(input);
-  t.ok(input === output, 'mutates input object');
-  t.same(output, {});
+  t.truthy(input === output, 'mutates input object');
+  t.deepEqual(output, {});
 });
 
 test.serial('writeInteraction with existing custom $file references', (t) => {
@@ -80,7 +80,7 @@ test.serial('writeInteraction with existing custom $file references', (t) => {
       name: NAME
     }))
     .then(() => loadJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`)))
-    .then((data) => t.same(data.config.default.message, customRefs.config.default.message))
+    .then((data) => t.deepEqual(data.config.default.message, customRefs.config.default.message))
     .then(() => fsp.readFile(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.message.html`), 'utf8'))
     .then((message) => t.is(message, '<h1>abc</h1>'));
 });

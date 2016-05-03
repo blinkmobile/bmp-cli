@@ -29,11 +29,10 @@ test.beforeEach((t) => {
 test.serial('read missing .blinkmrc.json', (t) => {
   return lib.read()
     .then((result) => {
-      console.log(result);
       t.fail();
     })
     .catch((err) => {
-      t.ok(err);
+      t.truthy(err);
     });
 });
 
@@ -44,7 +43,7 @@ test.serial('read empty .blinkmrc.json', (t) => {
       t.fail();
     })
     .catch((err) => {
-      t.ok(err);
+      t.truthy(err);
     });
 });
 
@@ -70,7 +69,7 @@ test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
       t.fail();
     })
     .catch((err) => {
-      t.ok(err);
+      t.truthy(err);
     });
 });
 

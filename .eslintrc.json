@@ -1,8 +1,10 @@
 {
-  "extends": ["eslint:recommended", "standard", "semistandard"],
+  "extends": ["eslint:recommended", "semistandard"],
   "env": {
-    "es6": true,
     "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
   },
   "rules": {
     "no-console": 0

@@ -36,25 +36,51 @@ test.beforeEach((t) => {
     });
 });
 
-test.serial('getDashboard', (t) => {
+test.serial('getAuthStatus 200 => CREDS_GOOD', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     t.is(options.method, 'GET');
-    t.is(options.url, `${ORIGIN}/_api/v1/dashboard`);
-    cb(null, { statusCode: 200 }, '{}');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    cb(null, { statusCode: 200 }, '{ "answerspaces": { "name": "space" } }');
   };
-  return api.getDashboard();
+  return api.getAuthStatus()
+    .then((status) => t.is(status, api.CREDS_GOOD));
+});
+
+test.serial('getAuthStatus 401 => CREDS_BAD', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'GET');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    cb(null, { statusCode: 401 }, '{}');
+  };
+  return api.getAuthStatus()
+    .then((status) => t.is(status, api.CREDS_BAD));
+});
+
+test.serial('logout then getAuthStatus => CREDS_MISSING', (t) => {
+  reqFn = (options, cb) => {
+    cb(new Error('unexpected call'));
+  };
+  return auth.logout()
+    .then(() => api.getAuthStatus())
+    .then((status) => t.is(status, api.CREDS_MISSING));
 });
 
 test.serial('getResource', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     t.is(options.method, 'GET');
-    t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
-    cb(null, { statusCode: 200 }, '{"answerspaces":{"id":"123"}}');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    cb(null, { statusCode: 200 }, `{
+      "answerspaces": {
+        "id": "123",
+        "name": "space"
+      }
+    }`);
   };
   return api.getResource({
-    id: '123',
+    uid: 'space',
     type: 'answerspaces'
   });
 });
@@ -63,11 +89,16 @@ test.serial('getResource with result mismatch', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     t.is(options.method, 'GET');
-    t.is(options.url, `${ORIGIN}/_api/v1/answerspaces/123`);
-    cb(null, { statusCode: 200 }, '{"answerspaces":{"id":"456"}}');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    cb(null, { statusCode: 200 }, `{
+      "answerspaces": {
+        "id": "456",
+        "name": "otherspace"
+      }
+    }`);
   };
   t.throws(api.getResource({
-    id: '123',
+    uid: 'space',
     type: 'answerspaces'
   }), /request-result mismatch/);
 });
@@ -76,13 +107,14 @@ test.serial('putResource with id', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     t.is(options.method, 'PUT');
-    t.is(options.url, `${ORIGIN}/_api/v1/interactions/123`);
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space/interactions/123`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.putResource({
     id: '123',
     data: { id: '123' },
-    type: 'interactions'
+    type: 'interactions',
+    uid: 'space'
   });
 });
 
@@ -90,11 +122,12 @@ test.serial('putResource without id', (t) => {
   const ORIGIN = 'https://example.com';
   reqFn = (options, cb) => {
     t.is(options.method, 'POST');
-    t.is(options.url, `${ORIGIN}/_api/v1/interactions`);
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space/interactions`);
     cb(null, { statusCode: 200 }, '{}');
   };
   return api.putResource({
     data: {},
-    type: 'interactions'
+    type: 'interactions',
+    uid: 'space'
   });
 });

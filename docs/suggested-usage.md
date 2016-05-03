@@ -25,10 +25,6 @@
 
     - you may have to repeat this step later if you invalidate your remote credentials, or if you work on a different project with a different origin
 
-4. double-check that you're logged in as expected
-
-    - `blinkm bmp whoami`
-
 
 ## Download Project Content
 
@@ -82,11 +78,7 @@
 
     - `blinkm bmp scope`
 
-3. double-check that you have authenticated as expected
-
-    - `blinkm bmp whoami`
-
-4. send your local project files to our service for immediate deployment
+3. send your local project files to our service for immediate deployment
 
     - `blinkm bmp deploy`
 

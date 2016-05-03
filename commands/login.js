@@ -6,7 +6,10 @@ const prompt = require('prompt');
 
 // local modules
 
+const api = require('../lib/api.js');
 const auth = require('../lib/auth');
+const error = require('../lib/error');
+const isValidJWT = require('../lib/utils/jwt.js').isValidJWT;
 const scope = require('../lib/scope');
 
 // this module
@@ -17,8 +20,11 @@ function promptCredential () {
     prompt.get({
       properties: {
         credential: {
+          conform: (string) => isValidJWT(string),
+          description: 'token',
           hidden: true,
-          message: 'token or cookie, input is hidden',
+          message: 'must be a valid JSON Web Token (JWT)',
+          replace: '*',
           required: true
         }
       }
@@ -40,11 +46,25 @@ function getCredential (input) {
 }
 
 module.exports = function (input, flags, options) {
+  let currentScope = '';
   scope.read()
+    .then((s) => {
+      currentScope = s;
+    })
     .catch(() => Promise.reject(new Error('must set project scope first')))
     .then(() => getCredential(input))
     .then((credential) => auth.login({ credential }))
+    .then(() => api.getAuthStatus())
+    .then((status) => {
+      if (status === api.CREDS_GOOD) {
+        console.log(`authorised for ${currentScope}`);
+        return;
+      }
+      console.error(`denied access to ${currentScope}, try a new token`);
+      return auth.logout();
+    })
     .catch((err) => {
+      error.handle404(err);
       console.error(err);
       process.exit(1);
     });

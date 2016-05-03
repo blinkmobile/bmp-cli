@@ -2,6 +2,8 @@
 
 // local modules
 
+const api = require('../lib/api.js');
+const error = require('../lib/error');
 const scope = require('../lib/scope');
 
 // this module
@@ -16,13 +18,16 @@ module.exports = function (input, flags, options) {
     return;
   }
 
+  let currentScope;
   scope.read()
-    .then((scope) => {
-      console.log(scope);
-      process.exit(0);
+    .then((s) => {
+      currentScope = s;
     })
+    .then(() => api.getAuthStatus())
+    .then((status) => console.log(`${currentScope}: ${status}`))
     .catch((err) => {
       console.error(err);
+      error.handle404(err);
       process.exit(1);
     });
 };
