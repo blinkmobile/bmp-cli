@@ -1,6 +1,29 @@
 # Change Log
 
 
+## 1.0.0 - 2016-05-09
+
+
+### Added
+
+- `bm bmp login` immediately attempts to use new credentials, and shows the result
+
+    - does not store rejected credentials
+
+- `bm bmp scope` also attempts to use stored credentials, and shows the result
+
+- added instructions to use an older CLI with older BMP services when appropriate
+
+
+### Changed
+
+- BC-17: use new v2 APIs in BMP exclusively (#17, @jokeyrhyme)
+
+- BC-17: `bm bmp login` only accepts a [JWT](https://jwt.io/), rejects anything else (#17, @jokeyrhyme)
+
+- no more `bm bmp whoami` command, it's gone
+
+
 ## 0.5.1 - 2016-03-11
 
 
