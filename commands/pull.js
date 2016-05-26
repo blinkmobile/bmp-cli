@@ -13,9 +13,12 @@ const pull = require('../lib/pull');
 // this module
 
 module.exports = function (input, flags, options) {
-  const gauge = new Gauge();
+  const gauge = new Gauge({ theme: 'colorASCII' });
 
-  progress.on('change', (name, completed) => gauge.show('pull', completed));
+  progress.on('change', (name, completed) => {
+    gauge.pulse();
+    gauge.show('pull', completed);
+  });
 
   return pull.pullAll({ prune: !!flags.prune })
     .then(() => {

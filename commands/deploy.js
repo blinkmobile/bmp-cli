@@ -13,9 +13,12 @@ const progress = require('../lib/progress');
 // this module
 
 module.exports = function (input, flags, options) {
-  const gauge = new Gauge();
+  const gauge = new Gauge({ theme: 'colorASCII' });
 
-  progress.on('change', (name, completed) => gauge.show('deploy', completed));
+  progress.on('change', (name, completed) => {
+    gauge.pulse();
+    gauge.show('deploy', completed);
+  });
 
   return deploy.deployAll({ prune: !!flags.prune })
     .then(() => {
