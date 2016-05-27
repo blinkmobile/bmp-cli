@@ -83,6 +83,11 @@ test.serial('newInteraction madl remote', (t) => {
         }));
         break;
 
+      case `${ORIGIN}/_api/v2/answerspaces/space`:
+        t.is(options.body.answerspaces.sitemap, '');
+        cb(null, { statusCode: 200 }, '{}');
+        break;
+
       default:
         cb(new Error(`unexpected fetch: ${JSON.stringify(options)}`));
     }

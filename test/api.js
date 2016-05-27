@@ -131,3 +131,26 @@ test.serial('putResource without id', (t) => {
     uid: 'space'
   });
 });
+
+test.serial('wipeSiteMap', (t) => {
+  const ORIGIN = 'https://example.com';
+  reqFn = (options, cb) => {
+    t.is(options.method, 'PUT');
+    t.is(options.url, `${ORIGIN}/_api/v2/answerspaces/space`);
+    t.deepEqual(options.body, {
+      answerspaces: { id: '123', name: 'space', sitemap: '' }
+    });
+    cb(null, { statusCode: 200 }, `{
+      "answerspaces": {
+        "id": "123",
+        "name": "space"
+      }
+    }`);
+  };
+  return api.wipeSiteMap({
+    id: '123',
+    data: { id: '123', name: 'space', config: {} },
+    uid: 'space',
+    type: 'answerspaces'
+  });
+});
