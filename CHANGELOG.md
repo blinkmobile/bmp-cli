@@ -1,6 +1,20 @@
 # Change Log
 
 
+## 1.0.1 - 2016-05-27
+
+
+### Fixed
+
+- BC-25: `create --remote` and `deploy` trigger sitemap regeneration (#20, @jokeyrhyme)
+
+    - previously, new interactions and/or security settings would not be visible to BMP clients (e.g. BIC, interaction/run endpoints, etc)
+
+    - requires server-side changes, BMP 3.0.1 does _not_ meet the requirements
+
+    - requires a BMP release that includes PLATFORM-1647
+
+
 ## 1.0.0 - 2016-05-09
 
 
