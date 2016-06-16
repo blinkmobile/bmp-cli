@@ -16,7 +16,7 @@
     "async": "1.5.2",
     "elegant-spinner": "1.0.1",
     "find-up": "1.1.2",
-    "gauge": "2.5.3",
+    "gauge": "2.6.0",
     "glob": "7.0.3",
     "jsonwebtoken": "7.0.1",
     "load-json-file": "2.0.0",
