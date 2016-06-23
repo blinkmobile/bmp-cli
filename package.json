@@ -41,7 +41,7 @@
     "fixpack": "^2.2.0",
     "greenkeeper-postpublish": "1.0.0",
     "mockery": "^1.4.0",
-    "npm-run-all": "^2.1.0",
+    "npm-run-all": "^2.2.1",
     "nyc": "^6.0.0",
     "temp": "^0.8.3"
   },
