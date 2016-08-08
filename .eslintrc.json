@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint:recommended", "semistandard"],
+  "extends": ["eslint:recommended", "standard"],
   "env": {
     "node": true
   },
@@ -7,6 +7,10 @@
     "ecmaVersion": 6
   },
   "rules": {
-    "no-console": 0
+    "no-console": 0,
+
+    "semi": [2, "always"],
+    "no-extra-semi": 2,
+    "semi-spacing": [2, { "before": false, "after": true }]
   }
 }
