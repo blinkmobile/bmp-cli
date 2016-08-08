@@ -13,7 +13,7 @@
     "@blinkmobile/json-as-files": "1.1.1",
     "appdirectory": "0.1.0",
     "are-we-there-yet": "1.1.2",
-    "async": "1.5.2",
+    "async": "2.0.1",
     "elegant-spinner": "1.0.1",
     "find-up": "1.1.2",
     "gauge": "2.6.0",
