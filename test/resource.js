@@ -35,6 +35,13 @@ test.beforeEach((t) => {
     });
 });
 
+test('readLocalTree', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  const expected = resource.normalizeTreePaths(require(path.join(fixturePath, 'expected.json')));
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((result) => t.deepEqual(result, expected));
+});
+
 test.serial('writeInteraction with existing custom $file references', (t) => {
   const NAME = 'abc';
   return writeJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`), customRefs)
