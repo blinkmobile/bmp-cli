@@ -29,8 +29,9 @@ bm bmp --help
   Getting work done:
     pull            => download remote configuration to local files
       --prune       => delete local files that are absent from remote
-    deploy          => update remote configuration to match local files
+    deploy          => update remote configuration to match local project
       --prune       => delete remote interactions that are absent locally
+      <file|glob>   => update remote configuration matching these files
 
   Creating new interactions:
     create interaction <name>

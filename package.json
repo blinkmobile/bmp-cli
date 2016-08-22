@@ -12,6 +12,7 @@
     "@blinkmobile/blinkmrc": "1.1.0",
     "@blinkmobile/json-as-files": "1.2.0",
     "are-we-there-yet": "1.1.2",
+    "argv-auto-glob": "1.0.1",
     "async": "2.0.1",
     "find-up": "1.1.2",
     "gauge": "2.6.0",

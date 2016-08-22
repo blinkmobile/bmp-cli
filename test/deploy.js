@@ -126,3 +126,31 @@ test.serial('deployAll with scope-content mismatch', (t) => {
   reqFn = (opts, cb) => { cb(new Error('unexpected fetch')); };
   t.throws(deploy.deployAll(), /scope-content mismatch/);
 });
+
+test.serial('deployOnly for answerSpace', (t) => {
+  reqFn = noInteractions;
+  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+    id: '123',
+    name: 'space'
+  })
+    .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'test')))
+    .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'test', 'test.json'), {
+      id: '456',
+      name: 'test'
+    }))
+    .then(() => deploy.deployOnly({ filePaths: [ 'answerSpace.json' ] }));
+});
+
+test.serial('deployOnly for all files is like deployAll', (t) => {
+  reqFn = oneInteraction;
+  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+    id: '123',
+    name: 'space'
+  })
+    .then(() => mkdirp(path.join(t.context.tempDir, 'interactions', 'test')))
+    .then(() => writeJson(path.join(t.context.tempDir, 'interactions', 'test', 'test.json'), {
+      id: '456',
+      name: 'test'
+    }))
+    .then(() => deploy.deployOnly({ filePaths: [ 'answerSpace.json', 'interactions/test/test.json' ] }));
+});
