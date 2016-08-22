@@ -35,42 +35,6 @@ test.beforeEach((t) => {
     });
 });
 
-test('fixAnswerSpace', (t) => {
-  const input = {
-    created_time: '',
-    modified_time: '',
-    links: {},
-    sitemap: ''
-  };
-  const output = resource.fixAnswerSpace(input);
-  t.truthy(input === output, 'mutates input object');
-  t.deepEqual(output, {});
-});
-
-test('fixInteraction', (t) => {
-  const input = {
-    created_time: '',
-    modified_time: '',
-    links: {},
-    order: 1
-  };
-  const output = resource.fixInteraction(input);
-  t.truthy(input === output, 'mutates input object');
-  t.deepEqual(output, { order: 1 });
-});
-
-test('fixInteraction with null order', (t) => {
-  const input = {
-    created_time: '',
-    modified_time: '',
-    links: {},
-    order: null
-  };
-  const output = resource.fixInteraction(input);
-  t.truthy(input === output, 'mutates input object');
-  t.deepEqual(output, {});
-});
-
 test.serial('writeInteraction with existing custom $file references', (t) => {
   const NAME = 'abc';
   return writeJson(path.join(t.context.tempDir, 'interactions', NAME, `${NAME}.json`), customRefs)
