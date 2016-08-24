@@ -26,8 +26,9 @@ module.exports = function (input, flags, options) {
     .then(() => api.getAuthStatus())
     .then((status) => console.log(`${currentScope}: ${status}`))
     .catch((err) => {
-      console.error(err);
       error.handle404(err);
+      error.handleScopeNotSet(err);
+      console.error(err);
       process.exit(1);
     });
 };

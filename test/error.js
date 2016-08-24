@@ -24,16 +24,11 @@ test.afterEach(() => {
   process.exit = processExit;
 });
 
-const allHandlers = [
-  'handle404',
-  'handleOnlyNoFiles',
-  'handleOnlyNoMatches',
-  'handleOnlyPrune',
-  'handleSitemap400'
-];
-allHandlers.forEach((name) => {
-  test(`"${name}" is a function`, (t) => t.is(typeof error[name], 'function'));
-});
+Object.keys(error)
+  .filter((name) => /^handle/.test(name))
+  .forEach((name) => {
+    test(`"${name}" is a function`, (t) => t.is(typeof error[name], 'function'));
+  });
 
 test('"handle404" with a 404 error', (t) => {
   process.exit = (code) => t.is(code, 1);
@@ -65,6 +60,16 @@ test(`"handleOnlyNoMatches" with a "${values.ERROR_ONLY_NO_MATCHES}" error`, (t)
 test('"handleOnlyNoMatches" with a different kind of error', (t) => {
   process.exit = (code) => t.fail('unexpected call');
   error.handleOnlyNoMatches(new Error('different kind of error'));
+});
+
+test(`"handleScopeNotSet" with a "${values.ERROR_SCOPE_NOT_SET}" error`, (t) => {
+  process.exit = (code) => t.is(code, 1);
+  error.handleScopeNotSet(new Error(values.ERROR_SCOPE_NOT_SET));
+});
+
+test('"handleScopeNotSet" with a different kind of error', (t) => {
+  process.exit = (code) => t.fail('unexpected call');
+  error.handleScopeNotSet(new Error('different kind of error'));
 });
 
 test('"handleSitemap400" with a 400 error', (t) => {
