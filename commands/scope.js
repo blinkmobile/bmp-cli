@@ -4,6 +4,7 @@
 
 const api = require('../lib/api.js');
 const error = require('../lib/error');
+const logger = require('../lib/utils/logger.js');
 const scope = require('../lib/scope');
 
 // this module
@@ -12,7 +13,7 @@ module.exports = function (input, flags, options) {
   if (input[0]) {
     scope.write({ scope: input[0] })
       .catch((err) => {
-        console.error(err);
+        logger.error(err);
         process.exit(1);
       });
     return;
@@ -24,11 +25,11 @@ module.exports = function (input, flags, options) {
       currentScope = s;
     })
     .then(() => api.getAuthStatus())
-    .then((status) => console.log(`${currentScope}: ${status}`))
+    .then((status) => logger.log(`${currentScope}: ${status}`))
     .catch((err) => {
       error.handle404(err);
       error.handleScopeNotSet(err);
-      console.error(err);
+      logger.error(err);
       process.exit(1);
     });
 };

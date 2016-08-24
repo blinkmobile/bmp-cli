@@ -1,21 +1,30 @@
 /* @flow */
 'use strict';
 
+// foreign modules
+
 const test = require('ava');
+
+// local modules
 
 const error = require('../lib/error.js');
 const values = require('../lib/values.js');
 
-const consoleError = console.error;
-const consoleWarn = console.warn;
+// this module
+
 const noop = () => {};
+
 const processExit = process.exit;
-let exitFn = () => {};
+
+/* eslint-disable no-console */ // mocking console here for silence
+
+let consoleError = console.error;
+let consoleWarn = console.warn;
 
 test.beforeEach(() => {
   console.error = noop;
   console.warn = noop;
-  process.exit = exitFn;
+  process.exit = noop;
 });
 
 test.afterEach(() => {
@@ -24,6 +33,9 @@ test.afterEach(() => {
   process.exit = processExit;
 });
 
+/* eslint-enable no-console */
+
+// everything starting with "handle" is a function
 Object.keys(error)
   .filter((name) => /^handle/.test(name))
   .forEach((name) => {

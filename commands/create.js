@@ -3,6 +3,7 @@
 // local modules
 
 const create = require('../lib/create');
+const logger = require('../lib/utils/logger.js');
 
 // this module
 
@@ -17,7 +18,7 @@ module.exports = function (input, flags, options) {
   const name = input[1];
 
   if (!~RESOURCE_TYPES.indexOf(resourceType)) {
-    console.error(`provide a supported resource: ${RESOURCE_TYPES.join(', ')}`);
+    logger.error(`provide a supported resource: ${RESOURCE_TYPES.join(', ')}`);
     process.exit(1);
   }
 
@@ -26,13 +27,13 @@ module.exports = function (input, flags, options) {
   if (resourceType === INTERACTION) {
     subType = flags.type || DEFAULT_INTERACTION_TYPE;
     if (!~INTERACTION_TYPES.indexOf(subType)) {
-      console.error(`provide a supported "type": ${INTERACTION_TYPES.join(', ')}`);
+      logger.error(`provide a supported "type": ${INTERACTION_TYPES.join(', ')}`);
       process.exit(1);
     }
   }
 
   if (!name) {
-    console.error('mandatory "name" not provided');
+    logger.error('mandatory "name" not provided');
     process.exit(1);
   }
 
