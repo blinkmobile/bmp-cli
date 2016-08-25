@@ -8,7 +8,7 @@ const logger = require('../lib/utils/logger.js');
 // this module
 
 module.exports = function (input, flags, options) {
-  auth.logout()
+  return auth.logout()
     .catch((err) => {
       logger.error(err);
       process.exit(1);

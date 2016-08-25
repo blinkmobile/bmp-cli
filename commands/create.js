@@ -37,7 +37,7 @@ module.exports = function (input, flags, options) {
     process.exit(1);
   }
 
-  create.newInteraction({
+  return create.newInteraction({
     name,
     remote: flags.remote,
     type: subType

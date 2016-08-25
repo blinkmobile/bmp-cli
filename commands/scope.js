@@ -11,17 +11,16 @@ const scope = require('../lib/scope');
 
 module.exports = function (input, flags, options) {
   if (input[0]) {
-    scope.write({ scope: input[0] })
+    return scope.write({ scope: input[0] })
       .catch((err) => {
         error.handleScopeInvalid(err);
         logger.error(err);
         process.exit(1);
       });
-    return;
   }
 
   let currentScope;
-  scope.read()
+  return scope.read()
     .then((s) => {
       currentScope = s;
     })

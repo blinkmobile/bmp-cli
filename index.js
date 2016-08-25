@@ -67,7 +67,7 @@ module.exports = function (input, flags) {
     process.exit(1);
   }
 
-  commands[command](input.slice(1), flags, { cwd: process.cwd() });
+  return commands[command](input.slice(1), flags, { cwd: process.cwd() });
 };
 
 module.exports.commands = commands;

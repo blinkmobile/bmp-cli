@@ -48,7 +48,7 @@ function getCredential (input) {
 
 module.exports = function (input, flags, options) {
   let currentScope = '';
-  scope.read()
+  return scope.read()
     .then((s) => {
       currentScope = s;
     })
