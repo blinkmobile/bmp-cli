@@ -8,7 +8,6 @@ const test = require('ava');
 // local modules
 
 const error = require('../lib/error.js');
-const values = require('../lib/values.js');
 
 // this module
 
@@ -42,11 +41,18 @@ Object.keys(error)
     test(`"${name}" is a function`, (t) => t.is(typeof error[name], 'function'));
   });
 
+// all string constants are values in an enum(eration): enumerators
+Object.keys(error)
+  .filter((name) => !!(typeof error[name] === 'string'))
+  .forEach((name) => {
+    test(`value of "${name}" is "${name}"`, (t) => t.is(error[name], name));
+  });
+
 const exitOnMatch = [
   { name: 'handle404', msg: '404', exitCode: 1 },
-  { name: 'handleOnlyNoMatches', msg: values.ERROR_ONLY_NO_MATCHES, exitCode: 0 },
-  { name: 'handleScopeInvalid', msg: values.ERROR_SCOPE_INVALID, exitCode: 1 },
-  { name: 'handleScopeNotSet', msg: values.ERROR_SCOPE_NOT_SET, exitCode: 1 }
+  { name: 'handleOnlyNoMatches', msg: error.ERROR_ONLY_NO_MATCHES, exitCode: 0 },
+  { name: 'handleScopeInvalid', msg: error.ERROR_SCOPE_INVALID, exitCode: 1 },
+  { name: 'handleScopeNotSet', msg: error.ERROR_SCOPE_NOT_SET, exitCode: 1 }
 ];
 exitOnMatch.forEach(({ name, msg, exitCode }) => {
   test(`"${name}()" with "${msg}" calls process.exit(${exitCode})`, (t) => {
