@@ -34,6 +34,7 @@ main(cli.input, cli.flags)
   .catch((err) => {
     error.handle404(err);
     error.handleOnlyNoMatches(err);
+    error.handleScopeContentMismatch(err);
     error.handleScopeInvalid(err);
     error.handleScopeNotSet(err);
 

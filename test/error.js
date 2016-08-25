@@ -51,6 +51,7 @@ Object.keys(error)
 const exitOnMatch = [
   { name: 'handle404', msg: '404', exitCode: 1 },
   { name: 'handleOnlyNoMatches', msg: error.ERROR_ONLY_NO_MATCHES, exitCode: 0 },
+  { name: 'handleScopeContentMismatch', msg: error.ERROR_SCOPE_CONTENT_MISMATCH, exitCode: 1 },
   { name: 'handleScopeInvalid', msg: error.ERROR_SCOPE_INVALID, exitCode: 1 },
   { name: 'handleScopeNotSet', msg: error.ERROR_SCOPE_NOT_SET, exitCode: 1 }
 ];

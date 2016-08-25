@@ -16,6 +16,7 @@ const writeJson = require('write-json-file');
 // local modules
 
 const auth = require('../lib/auth');
+const error = require('../lib/error.js');
 const deploy = require('../lib/deploy');
 const pkg = require('../package.json');
 
@@ -124,7 +125,7 @@ test.serial('deployAll with scope-content mismatch', (t) => {
   process.env.BMP_WORKING_DIR = fixturePath;
   process.env.BMP_SCOPE = ''; // rely on .blinkmrc.json file
   reqFn = (opts, cb) => { cb(new Error('unexpected fetch')); };
-  t.throws(deploy.deployAll(), /scope-content mismatch/);
+  t.throws(deploy.deployAll(), error.ERROR_SCOPE_CONTENT_MISMATCH);
 });
 
 test.serial('deployOnly for answerSpace', (t) => {
