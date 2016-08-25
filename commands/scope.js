@@ -25,12 +25,5 @@ module.exports = function (input, flags, options) {
       currentScope = s;
     })
     .then(() => api.getAuthStatus())
-    .then((status) => logger.log(`${currentScope}: ${status}`))
-    .catch((err) => {
-      error.handle404(err);
-      error.handleScopeInvalid(err);
-      error.handleScopeNotSet(err);
-      logger.error(err);
-      process.exit(1);
-    });
+    .then((status) => logger.log(`${currentScope}: ${status}`));
 };
