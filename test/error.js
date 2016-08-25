@@ -42,14 +42,22 @@ Object.keys(error)
     test(`"${name}" is a function`, (t) => t.is(typeof error[name], 'function'));
   });
 
-test('"handle404" with a 404 error', (t) => {
-  process.exit = (code) => t.is(code, 1);
-  error.handle404(new Error('404'));
-});
+const exitOnMatch = [
+  { name: 'handle404', msg: '404', exitCode: 1 },
+  { name: 'handleOnlyNoMatches', msg: values.ERROR_ONLY_NO_MATCHES, exitCode: 0 },
+  { name: 'handleScopeInvalid', msg: values.ERROR_SCOPE_INVALID, exitCode: 1 },
+  { name: 'handleScopeNotSet', msg: values.ERROR_SCOPE_NOT_SET, exitCode: 1 }
+];
+exitOnMatch.forEach(({ name, msg, exitCode }) => {
+  test(`"${name}()" with "${msg}" calls process.exit(${exitCode})`, (t) => {
+    process.exit = (code) => t.is(code, exitCode);
+    error[name](new Error(msg));
+  });
 
-test('"handle404" with a different kind of error', (t) => {
-  process.exit = (code) => t.fail('unexpected call');
-  error.handle404(new Error('different kind of error'));
+  test(`"${name}()" without "${msg}" does not call process.exit()`, (t) => {
+    process.exit = (code) => t.fail('unexpected call');
+    error[name](new Error('different kind of error'));
+  });
 });
 
 // tests for error handlers that always call `process.exit(1);` (error)
@@ -62,26 +70,6 @@ exitOne.forEach((name) => {
     process.exit = (code) => t.is(code, 1);
     error[name](new Error('blah blah'));
   });
-});
-
-test(`"handleOnlyNoMatches" with a "${values.ERROR_ONLY_NO_MATCHES}" error`, (t) => {
-  process.exit = (code) => t.is(code, 0);
-  error.handleOnlyNoMatches(new Error(values.ERROR_ONLY_NO_MATCHES));
-});
-
-test('"handleOnlyNoMatches" with a different kind of error', (t) => {
-  process.exit = (code) => t.fail('unexpected call');
-  error.handleOnlyNoMatches(new Error('different kind of error'));
-});
-
-test(`"handleScopeNotSet" with a "${values.ERROR_SCOPE_NOT_SET}" error`, (t) => {
-  process.exit = (code) => t.is(code, 1);
-  error.handleScopeNotSet(new Error(values.ERROR_SCOPE_NOT_SET));
-});
-
-test('"handleScopeNotSet" with a different kind of error', (t) => {
-  process.exit = (code) => t.fail('unexpected call');
-  error.handleScopeNotSet(new Error('different kind of error'));
 });
 
 test('"handleSitemap400" with a 400 error', (t) => {

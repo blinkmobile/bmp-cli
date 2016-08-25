@@ -13,6 +13,7 @@ module.exports = function (input, flags, options) {
   if (input[0]) {
     scope.write({ scope: input[0] })
       .catch((err) => {
+        error.handleScopeInvalid(err);
         logger.error(err);
         process.exit(1);
       });
@@ -28,6 +29,7 @@ module.exports = function (input, flags, options) {
     .then((status) => logger.log(`${currentScope}: ${status}`))
     .catch((err) => {
       error.handle404(err);
+      error.handleScopeInvalid(err);
       error.handleScopeNotSet(err);
       logger.error(err);
       process.exit(1);

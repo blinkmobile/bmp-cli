@@ -11,6 +11,7 @@ Object.keys(values).forEach((name) => {
 
 const enumerators = [
   'ERROR_ONLY_NO_MATCHES',
+  'ERROR_SCOPE_INVALID',
   'ERROR_SCOPE_NOT_SET'
 ];
 enumerators.forEach((name) => {
