@@ -1,0 +1,55 @@
+{
+  "answerSpace": {
+    "refs": [
+      {
+        "path": [],
+        "target": "answerSpace.json",
+        "type": "$file"
+      },
+      {
+        "path": ["config", "default", "styleSheet"],
+        "target": "answerSpace.styleSheet.css",
+        "type": "$file"
+      }
+    ]
+  },
+  "interactions": {
+    "hyperlink": {
+      "refs": [
+        {
+          "path": [],
+          "target": "interactions/hyperlink/hyperlink.json",
+          "type": "$file"
+        }
+      ]
+    },
+    "madl": {
+      "refs": [
+        {
+          "path": [],
+          "target": "interactions/madl/madl.json",
+          "type": "$file"
+        },
+        {
+          "path": ["config", "default", "madl"],
+          "target": "interactions/madl/madl.madl.php",
+          "type": "$file"
+        }
+      ]
+    },
+    "message": {
+      "refs": [
+        {
+          "path": [],
+          "target": "interactions/message/message.json",
+          "type": "$file"
+        },
+        {
+          "path": ["config", "default", "message"],
+          "target": "interactions/message/message.message.txt",
+          "type": "$file"
+        }
+      ]
+    }
+  }
+}

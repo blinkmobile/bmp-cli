@@ -1,0 +1,11 @@
+{
+  "config": {
+    "default": {
+      "madl": {
+        "$file": "madl.madl.php"
+      }
+    }
+  },
+  "id": "123",
+  "name": "madl"
+}

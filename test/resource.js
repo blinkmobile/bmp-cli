@@ -35,40 +35,63 @@ test.beforeEach((t) => {
     });
 });
 
-test('fixAnswerSpace', (t) => {
-  const input = {
-    created_time: '',
-    modified_time: '',
-    links: {},
-    sitemap: ''
-  };
-  const output = resource.fixAnswerSpace(input);
-  t.truthy(input === output, 'mutates input object');
-  t.deepEqual(output, {});
+test('matchTreePaths: no filePaths', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((tree) => resource.matchTreePaths(tree, []))
+    .then((tree) => {
+      t.falsy(tree.answerSpace);
+      t.is(Object.keys(tree.interactions).length, 0);
+    });
 });
 
-test('fixInteraction', (t) => {
-  const input = {
-    created_time: '',
-    modified_time: '',
-    links: {},
-    order: 1
-  };
-  const output = resource.fixInteraction(input);
-  t.truthy(input === output, 'mutates input object');
-  t.deepEqual(output, { order: 1 });
+test('matchTreePaths: answerSpace filePath', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((tree) => resource.matchTreePaths(tree, [ 'answerSpace.json' ]))
+    .then((tree) => {
+      t.truthy(tree.answerSpace);
+      t.is(Object.keys(tree.interactions).length, 0);
+    });
 });
 
-test('fixInteraction with null order', (t) => {
-  const input = {
-    created_time: '',
-    modified_time: '',
-    links: {},
-    order: null
-  };
-  const output = resource.fixInteraction(input);
-  t.truthy(input === output, 'mutates input object');
-  t.deepEqual(output, {});
+test('matchTreePaths: answerSpace content filePath', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((tree) => resource.matchTreePaths(tree, [ 'answerSpace.styleSheet.css' ]))
+    .then((tree) => {
+      t.truthy(tree.answerSpace);
+      t.is(Object.keys(tree.interactions).length, 0);
+    });
+});
+
+test('matchTreePaths: interaction filePath', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((tree) => resource.matchTreePaths(tree, [ 'interactions/madl/madl.json' ]))
+    .then((tree) => {
+      t.falsy(tree.answerSpace);
+      t.is(Object.keys(tree.interactions).length, 1);
+      t.truthy(tree.interactions.madl);
+    });
+});
+
+test('matchTreePaths: interaction content filePath', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((tree) => resource.matchTreePaths(tree, [ 'interactions/madl/madl.madl.php' ]))
+    .then((tree) => {
+      t.falsy(tree.answerSpace);
+      t.is(Object.keys(tree.interactions).length, 1);
+      t.truthy(tree.interactions.madl);
+    });
+});
+
+test('readLocalTree', (t) => {
+  const fixturePath = path.join(__dirname, 'fixtures', 'resource', 'local-tree');
+  const expected = resource.normalizeTreePaths(require(path.join(fixturePath, 'expected.json')));
+  return resource.readLocalTree({ cwd: fixturePath })
+    .then((result) => t.deepEqual(result, expected));
 });
 
 test.serial('writeInteraction with existing custom $file references', (t) => {

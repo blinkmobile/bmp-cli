@@ -1,0 +1,11 @@
+{
+  "config": {
+    "default": {
+      "message": {
+        "$file": "message.message.txt"
+      }
+    }
+  },
+  "id": "456",
+  "name": "message"
+}

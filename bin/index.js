@@ -16,9 +16,15 @@ const cli = meow({
   version: true
 }, {
   boolean: [
+    'only',
     'prune',
     'remote'
   ],
+  defaults: {
+    only: false,
+    prune: false,
+    remote: false
+  },
   type: [ 'type' ]
 });
 

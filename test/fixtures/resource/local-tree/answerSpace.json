@@ -1,0 +1,9 @@
+{
+  "config": {
+    "default": {
+      "styleSheet": {
+        "$file": "answerSpace.styleSheet.css"
+      }
+    }
+  }
+}
