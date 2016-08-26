@@ -63,18 +63,35 @@ test.serial('read .blinkmrc.json in parent directory', (t) => {
     });
 });
 
-test.serial('write invalid scope URL to .blinkmrc.json', (t) => {
-  return lib.write({ scope: 'abc' })
-    .then(() => {
-      t.fail();
-    })
-    .catch((err) => {
-      t.truthy(err);
-    });
+const invalidScopes = [
+  'abc',
+  '/abc',
+  'example.com/',
+  'https://example.com',
+  'https://example.com/'
+];
+invalidScopes.forEach((scope) => {
+  test.serial(`write invalid scope URL "${scope}" to .blinkmrc.json`, (t) => {
+    return lib.write({ scope })
+      .then(() => {
+        t.fail();
+      })
+      .catch((err) => {
+        t.truthy(err);
+      });
+  });
 });
 
 test.serial('write to .blinkmrc.json in same directory', (t) => {
   return lib.write({ scope: 'https://example.com/space' })
+    .then(() => lib.read())
+    .then((scope) => {
+      t.is(scope, 'https://example.com/space');
+    });
+});
+
+test.serial('write URL without protocol to .blinkmrc.json in same directory', (t) => {
+  return lib.write({ scope: 'example.com/space' })
     .then(() => lib.read())
     .then((scope) => {
       t.is(scope, 'https://example.com/space');
