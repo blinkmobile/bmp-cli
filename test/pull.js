@@ -15,6 +15,7 @@ const test = require('ava');
 // local modules
 
 const auth = require('../lib/auth');
+const error = require('../lib/error.js');
 const pkg = require('../package.json');
 const pull = require('../lib/pull');
 
@@ -76,5 +77,5 @@ test.serial('pullAll with scope-content mismatch', (t) => {
   process.env.BMP_WORKING_DIR = fixturePath;
   process.env.BMP_SCOPE = ''; // rely on .blinkmrc.json file
   reqFn = (opts, cb) => { cb(new Error('unexpected fetch')); };
-  t.throws(pull.pullAll(), /scope-content mismatch/);
+  t.throws(pull.pullAll(), error.ERROR_SCOPE_CONTENT_MISMATCH);
 });

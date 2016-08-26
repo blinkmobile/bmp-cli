@@ -8,7 +8,7 @@ const prompt = require('prompt');
 
 const api = require('../lib/api.js');
 const auth = require('../lib/auth');
-const error = require('../lib/error');
+const logger = require('../lib/utils/logger.js');
 const isValidJWT = require('../lib/utils/jwt.js').isValidJWT;
 const scope = require('../lib/scope');
 
@@ -47,7 +47,7 @@ function getCredential (input) {
 
 module.exports = function (input, flags, options) {
   let currentScope = '';
-  scope.read()
+  return scope.read()
     .then((s) => {
       currentScope = s;
     })
@@ -57,15 +57,10 @@ module.exports = function (input, flags, options) {
     .then(() => api.getAuthStatus())
     .then((status) => {
       if (status === api.CREDS_GOOD) {
-        console.log(`authorised for ${currentScope}`);
+        logger.log(`authorised for ${currentScope}`);
         return;
       }
-      console.error(`denied access to ${currentScope}, try a new token`);
+      logger.error(`denied access to ${currentScope}, try a new token`);
       return auth.logout();
-    })
-    .catch((err) => {
-      error.handle404(err);
-      console.error(err);
-      process.exit(1);
     });
 };

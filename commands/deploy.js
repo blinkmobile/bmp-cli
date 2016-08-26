@@ -43,8 +43,6 @@ module.exports = function (input, flags, options) {
     })
     .catch((err) => {
       gauge.hide();
-      error.handle404(err);
-      error.handleOnlyNoMatches(err);
       throw err;
     });
 };

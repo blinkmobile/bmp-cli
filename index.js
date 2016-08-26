@@ -15,6 +15,7 @@ const commands = {
   scope: require('./commands/scope')
 };
 
+const logger = require('./lib/utils/logger.js');
 const pkg = require('./package.json');
 
 // this module
@@ -51,22 +52,22 @@ module.exports = function (input, flags) {
   const command = input[0];
 
   if (!command) {
-    console.log(help);
+    logger.log(help);
     process.exit(0);
   }
 
   if (!commands[command]) {
-    console.error(`unknown command: ${command}`);
-    console.log(help);
+    logger.error(`unknown command: ${command}`);
+    logger.log(help);
     process.exit(1);
   }
 
   if (typeof commands[command] !== 'function') {
-    console.log('not implemented');
+    logger.log('not implemented');
     process.exit(1);
   }
 
-  commands[command](input.slice(1), flags, { cwd: process.cwd() });
+  return commands[command](input.slice(1), flags, { cwd: process.cwd() });
 };
 
 module.exports.commands = commands;

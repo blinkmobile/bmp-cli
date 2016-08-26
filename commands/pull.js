@@ -6,7 +6,6 @@ const Gauge = require('gauge');
 
 // local modules
 
-const error = require('../lib/error');
 const progress = require('../lib/progress');
 const pull = require('../lib/pull');
 
@@ -27,7 +26,6 @@ module.exports = function (input, flags, options) {
     })
     .catch((err) => {
       gauge.hide();
-      error.handle404(err);
       throw err;
     });
 };

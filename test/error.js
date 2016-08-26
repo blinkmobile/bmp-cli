@@ -1,21 +1,29 @@
 /* @flow */
 'use strict';
 
+// foreign modules
+
 const test = require('ava');
 
-const error = require('../lib/error.js');
-const values = require('../lib/values.js');
+// local modules
 
-const consoleError = console.error;
-const consoleWarn = console.warn;
+const error = require('../lib/error.js');
+
+// this module
+
 const noop = () => {};
+
 const processExit = process.exit;
-let exitFn = () => {};
+
+/* eslint-disable no-console */ // mocking console here for silence
+
+let consoleError = console.error;
+let consoleWarn = console.warn;
 
 test.beforeEach(() => {
   console.error = noop;
   console.warn = noop;
-  process.exit = exitFn;
+  process.exit = noop;
 });
 
 test.afterEach(() => {
@@ -24,25 +32,39 @@ test.afterEach(() => {
   process.exit = processExit;
 });
 
-const allHandlers = [
-  'handle404',
-  'handleOnlyNoFiles',
-  'handleOnlyNoMatches',
-  'handleOnlyPrune',
-  'handleSitemap400'
+/* eslint-enable no-console */
+
+// everything starting with "handle" is a function
+Object.keys(error)
+  .filter((name) => /^handle/.test(name))
+  .forEach((name) => {
+    test(`"${name}" is a function`, (t) => t.is(typeof error[name], 'function'));
+  });
+
+// all string constants are values in an enum(eration): enumerators
+Object.keys(error)
+  .filter((name) => !!(typeof error[name] === 'string'))
+  .forEach((name) => {
+    test(`value of "${name}" is "${name}"`, (t) => t.is(error[name], name));
+  });
+
+const exitOnMatch = [
+  { name: 'handle404', msg: '404', exitCode: 1 },
+  { name: 'handleOnlyNoMatches', msg: error.ERROR_ONLY_NO_MATCHES, exitCode: 0 },
+  { name: 'handleScopeContentMismatch', msg: error.ERROR_SCOPE_CONTENT_MISMATCH, exitCode: 1 },
+  { name: 'handleScopeInvalid', msg: error.ERROR_SCOPE_INVALID, exitCode: 1 },
+  { name: 'handleScopeNotSet', msg: error.ERROR_SCOPE_NOT_SET, exitCode: 1 }
 ];
-allHandlers.forEach((name) => {
-  test(`"${name}" is a function`, (t) => t.is(typeof error[name], 'function'));
-});
+exitOnMatch.forEach(({ name, msg, exitCode }) => {
+  test(`"${name}()" with "${msg}" calls process.exit(${exitCode})`, (t) => {
+    process.exit = (code) => t.is(code, exitCode);
+    error[name](new Error(msg));
+  });
 
-test('"handle404" with a 404 error', (t) => {
-  process.exit = (code) => t.is(code, 1);
-  error.handle404(new Error('404'));
-});
-
-test('"handle404" with a different kind of error', (t) => {
-  process.exit = (code) => t.fail('unexpected call');
-  error.handle404(new Error('different kind of error'));
+  test(`"${name}()" without "${msg}" does not call process.exit()`, (t) => {
+    process.exit = (code) => t.fail('unexpected call');
+    error[name](new Error('different kind of error'));
+  });
 });
 
 // tests for error handlers that always call `process.exit(1);` (error)
@@ -55,16 +77,6 @@ exitOne.forEach((name) => {
     process.exit = (code) => t.is(code, 1);
     error[name](new Error('blah blah'));
   });
-});
-
-test(`"handleOnlyNoMatches" with a "${values.ERROR_ONLY_NO_MATCHES}" error`, (t) => {
-  process.exit = (code) => t.is(code, 0);
-  error.handleOnlyNoMatches(new Error(values.ERROR_ONLY_NO_MATCHES));
-});
-
-test('"handleOnlyNoMatches" with a different kind of error', (t) => {
-  process.exit = (code) => t.fail('unexpected call');
-  error.handleOnlyNoMatches(new Error('different kind of error'));
 });
 
 test('"handleSitemap400" with a 400 error', (t) => {
