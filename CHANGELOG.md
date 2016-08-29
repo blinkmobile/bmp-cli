@@ -1,6 +1,53 @@
 # Change Log
 
 
+## 1.1.0 - 2016-08-29
+
+
+### Security
+
+- addressed security advisory: https://snyk.io/vuln/npm:tough-cookie:20160722
+
+
+### Adds
+
+- BC-34: `deploy --only` flag for selective deployment (#70, @jokeyrhyme), e.g.
+
+    - `bm bmp deploy --only answerSpace.*` only the top-level
+
+    - `bm bmp deploy --only interactions/**/*.html` only interactions related to HTML files
+
+    - `bm bmp deploy --only interactions/name/**/*` only "name" interaction
+
+    - note: this will still deploy a whole resource at a minimum, not the part related to the specified files
+
+    - note: if you get errors, check that your wildcards actually match expected files
+
+
+### Changed
+
+- BC-29: bumped [async](https://www.npmjs.com/package/async) to 2.0.1 (#61, @jokeyrhyme)
+
+- BC-29: bumped [request](https://www.npmjs.com/package/request) to 2.74.0
+
+
+### Fixed
+
+- BC-24: protocol-free scopes fallback to HTTPS (#73, @jokeyrhyme)
+
+    - means you don't need to type in the "https://" and it should still work
+
+- BC-32: add missing documentation for how to change file extensions (#68, @jokeyrhyme)
+
+    - see: https://github.com/blinkmobile/bmp-cli/blob/master/docs/customisation.md
+
+- BC-33: helpful messages for ERROR_SCOPE_CONTENT_MISMATCH, ERROR_SCOPE_INVALID, and ERROR_SCOPE_NOT_SET (#72, @jokeyrhyme)
+
+    - for these errors, messages are more instructional and no longer include stack traces
+
+    - HelpDesk: 9581-RULX-4483
+
+
 ## 1.0.1 - 2016-05-27
 
 
