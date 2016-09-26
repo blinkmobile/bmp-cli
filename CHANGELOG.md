@@ -1,6 +1,18 @@
 # Change Log
 
 
+## Unreleased
+
+
+### Fixed
+
+-   bump [blinkmobile/json-as-files](https://github.com/blinkmobile/json-as-files.js/releases/tag/1.2.1) to 1.2.1 (@jokeyrhyme)
+
+    -   fixes "TypeError: Expected a plain object" when trying to extract `null`
+
+    -   HelpDesk: 3691-FKCN-9070
+
+
 ## 1.1.0 - 2016-08-29
 
 
