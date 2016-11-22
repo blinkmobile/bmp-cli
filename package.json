@@ -31,7 +31,7 @@
     "write-json-file": "2.0.0"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.17.0",
     "eslint": "^3.10.2",
     "eslint-config-semistandard": "^7.0.0",
     "eslint-config-standard": "^6.2.1",
@@ -40,7 +40,7 @@
     "fixpack": "^2.2.0",
     "greenkeeper-postpublish": "^1.0.0",
     "mockery": "^2.0.0",
-    "npm-bin-ava-tester": "^1.0.0",
+    "npm-bin-ava-tester": "^1.1.0",
     "npm-run-all": "^3.1.1",
     "nyc": "^10.0.0",
     "temp": "^0.8.3"
