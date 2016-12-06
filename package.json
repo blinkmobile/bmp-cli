@@ -18,7 +18,7 @@
     "find-up": "2.1.0",
     "gauge": "2.7.2",
     "glob": "7.1.1",
-    "jsonwebtoken": "7.1.9",
+    "jsonwebtoken": "7.2.0",
     "load-json-file": "2.0.0",
     "lodash.memoize": "4.1.2",
     "meow": "3.7.0",
