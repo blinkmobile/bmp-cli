@@ -55,7 +55,10 @@ const exitOnMatch = [
   { name: 'handleScopeInvalid', msg: error.ERROR_SCOPE_INVALID, exitCode: 1 },
   { name: 'handleScopeNotSet', msg: error.ERROR_SCOPE_NOT_SET, exitCode: 1 }
 ];
-exitOnMatch.forEach(({ name, msg, exitCode }) => {
+exitOnMatch.forEach((match) => {
+  const name = match.name;
+  const msg = match.msg;
+  const exitCode = match.exitCode;
   test(`"${name}()" with "${msg}" calls process.exit(${exitCode})`, (t) => {
     process.exit = (code) => t.is(code, exitCode);
     error[name](new Error(msg));
@@ -63,7 +66,7 @@ exitOnMatch.forEach(({ name, msg, exitCode }) => {
 
   test(`"${name}()" without "${msg}" does not call process.exit()`, (t) => {
     process.exit = (code) => t.fail('unexpected call');
-    error[name](new Error('different kind of error'));
+    return t.notThrows(() => error[name](new Error('different kind of error')));
   });
 });
 
@@ -86,4 +89,3 @@ test('"handleSitemap400" with a 400 error', (t) => {
 test('"handleSitemap400" with a different kind of error', (t) => {
   t.throws(() => error.handleSitemap400(new Error('different kind of error')));
 });
-
