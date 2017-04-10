@@ -97,7 +97,7 @@ test.serial('getResource with result mismatch', (t) => {
       }
     }`);
   };
-  t.throws(api.getResource({
+  return t.throws(api.getResource({
     uid: 'space',
     type: 'answerspaces'
   }), /request-result mismatch/);

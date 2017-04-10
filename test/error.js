@@ -63,7 +63,7 @@ exitOnMatch.forEach(({ name, msg, exitCode }) => {
 
   test(`"${name}()" without "${msg}" does not call process.exit()`, (t) => {
     process.exit = (code) => t.fail('unexpected call');
-    error[name](new Error('different kind of error'));
+    return t.notThrows(() => error[name](new Error('different kind of error')));
   });
 });
 
@@ -86,4 +86,3 @@ test('"handleSitemap400" with a 400 error', (t) => {
 test('"handleSitemap400" with a different kind of error', (t) => {
   t.throws(() => error.handleSitemap400(new Error('different kind of error')));
 });
-

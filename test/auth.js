@@ -50,14 +50,9 @@ test.serial('login with scope', (t) => {
 });
 
 test.serial('logout without login first', (t) => {
-  const CONFIG_FILE = path.join(t.context.tempDir, 'blinkmrc.json');
-  return auth.logout({
-    credential: 'abcdef'
-  })
-    .then(() => loadJson(CONFIG_FILE))
-    .catch((err) => {
-      t.truthy(err);
-    });
+  process.env.BMP_SCOPE = null;
+  process.env.BMP_WORKING_DIR = '.';
+  return t.throws(auth.logout());
 });
 
 test.serial('login then logout', (t) => {

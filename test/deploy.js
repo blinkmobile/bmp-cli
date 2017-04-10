@@ -52,7 +52,7 @@ test.beforeEach((t) => {
 
 test.serial('deployAll', (t) => {
   reqFn = oneInteraction;
-  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+  const promise = writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
     id: '123',
     name: 'space'
   })
@@ -62,15 +62,19 @@ test.serial('deployAll', (t) => {
       name: 'test'
     }))
     .then(() => deploy.deployAll());
+
+  return t.notThrows(promise);
 });
 
 test.serial('deployAll no interactions', (t) => {
   reqFn = noInteractions;
-  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+  const promise = writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
     id: '123',
     name: 'space'
   })
     .then(() => deploy.deployAll());
+
+  return t.notThrows(promise);
 });
 
 test.serial('deployAll --prune', (t) => {
@@ -102,7 +106,7 @@ test.serial('deployAll --prune', (t) => {
 test.serial('deployAll with .DS_Store files', (t) => {
   const tempDir = t.context.tempDir;
   reqFn = oneInteraction;
-  return Promise.all([
+  const promise = Promise.all([
     writeJson(path.join(tempDir, 'answerSpace.json'), {
       id: '123',
       name: 'space'
@@ -118,6 +122,8 @@ test.serial('deployAll with .DS_Store files', (t) => {
       writeJson(path.join(tempDir, 'interactions', 'test', '.DS_Store'), {})
     ]))
     .then(() => deploy.deployAll());
+
+  return t.notThrows(promise);
 });
 
 test.serial('deployAll with scope-content mismatch', (t) => {
@@ -125,12 +131,12 @@ test.serial('deployAll with scope-content mismatch', (t) => {
   process.env.BMP_WORKING_DIR = fixturePath;
   process.env.BMP_SCOPE = ''; // rely on .blinkmrc.json file
   reqFn = (opts, cb) => { cb(new Error('unexpected fetch')); };
-  t.throws(deploy.deployAll(), error.ERROR_SCOPE_CONTENT_MISMATCH);
+  return t.throws(deploy.deployAll(), error.ERROR_SCOPE_CONTENT_MISMATCH);
 });
 
 test.serial('deployOnly for answerSpace', (t) => {
   reqFn = noInteractions;
-  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+  const promise = writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
     id: '123',
     name: 'space'
   })
@@ -140,11 +146,13 @@ test.serial('deployOnly for answerSpace', (t) => {
       name: 'test'
     }))
     .then(() => deploy.deployOnly({ filePaths: [ 'answerSpace.json' ] }));
+
+  return t.notThrows(promise);
 });
 
 test.serial('deployOnly for all files is like deployAll', (t) => {
   reqFn = oneInteraction;
-  return writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
+  const promise = writeJson(path.join(t.context.tempDir, 'answerSpace.json'), {
     id: '123',
     name: 'space'
   })
@@ -154,4 +162,6 @@ test.serial('deployOnly for all files is like deployAll', (t) => {
       name: 'test'
     }))
     .then(() => deploy.deployOnly({ filePaths: [ 'answerSpace.json', 'interactions/test/test.json' ] }));
+
+  return t.notThrows(promise);
 });
