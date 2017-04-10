@@ -39,8 +39,7 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^3.0.1",
-    "fixpack": "^2.2.0",
-    "greenkeeper-postpublish": "^1.0.0",
+    "fixpack": "^2.3.1",
     "mockery": "^2.0.0",
     "npm-bin-ava-tester": "^1.1.0",
     "npm-run-all": "^4.0.0",
@@ -76,9 +75,10 @@
     "ava": "nyc ava",
     "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
-    "nyc": "nyc check-coverage -s 80 -b 50 -f 80 -l 80",
-    "postpublish": "greenkeeper-postpublish",
+    "flow_check": "flow check",
+    "nyc": "nyc check-coverage",
     "posttest": "npm-run-all eslint fixpack",
+    "pretest": "npm run fixpack",
     "test": "npm-run-all -s ava nyc"
   }
 }

@@ -1,9 +1,19 @@
 {
-  "extends": ["eslint:recommended", "semistandard"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended",
+    "semistandard"
+  ],
   "env": {
     "node": true
   },
   "parserOptions": {
     "ecmaVersion": 6
+  },
+  "plugins": [
+    "node"
+  ],
+  "rules": {
+    "no-process-exit": "warn"
   }
 }
