@@ -11,7 +11,7 @@
   "dependencies": {
     "@blinkmobile/blinkmrc": "1.1.0",
     "@blinkmobile/json-as-files": "1.2.1",
-    "are-we-there-yet": "1.1.2",
+    "are-we-there-yet": "1.1.4",
     "argv-auto-glob": "1.0.1",
     "async": "2.3.0",
     "chalk": "1.1.3",
