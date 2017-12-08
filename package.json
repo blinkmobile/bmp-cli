@@ -25,9 +25,9 @@
     "mkdirp": "0.5.1",
     "pify": "3.0.0",
     "prompt": "1.0.0",
+    "update-notifier": "2.3.0",
     "request": "2.83.0",
     "rimraf": "2.6.2",
-    "update-notifier": "2.2.0",
     "write-json-file": "2.1.0"
   },
   "devDependencies": {
