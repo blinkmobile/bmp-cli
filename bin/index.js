@@ -17,17 +17,12 @@ const cli = meow({
   help: main.help,
   version: true
 }, {
-  boolean: [
-    'only',
-    'prune',
-    'remote'
-  ],
-  defaults: {
-    only: false,
-    prune: false,
-    remote: false
-  },
-  type: [ 'type' ]
+  flags: {
+    only: {type: 'boolean', default: false},
+    prune: {type: 'boolean', default: false},
+    remote: {type: 'boolean', default: false},
+    type: {type: 'string', default: 'madl'}
+  }
 });
 
 main(cli.input, cli.flags)
