@@ -15,7 +15,7 @@
     "argv-auto-glob": "1.0.1",
     "async": "2.6.0",
     "chalk": "2.3.0",
-    "find-up": "2.1.0",
+    "find-up": "3.0.0",
     "gauge": "2.7.4",
     "glob": "7.1.2",
     "jsonwebtoken": "8.1.1",
